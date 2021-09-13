@@ -1,0 +1,26 @@
+Kanban Backend
+
+Current Tasks
+-----------------------------------------
+
+
+#========================================
+Task #3: Implement Basic Code Skeleton
+Resolution: Not Started
+SubTasks: None
+#========================================
+
+#========================================
+Task #2: Design Unit and Intergration Tests
+Resolution: Not Started
+SubTasks: Task #3
+#========================================
+
+Finished Tasks
+-----------------------------------------
+
+#========================================
+Task #1: Make Back End Class Design
+Resolution: Finished
+SubTasks: None
+#========================================

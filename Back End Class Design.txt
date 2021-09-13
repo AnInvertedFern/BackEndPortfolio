@@ -1,0 +1,143 @@
+Back End Class Break Down
+-----------------------------------------
+
+
+BackendApplication.java
+-----------------------------------------
+Responsiblities: 
+ - Holds @SpringBootApplication
+
+SiteUser.java                User is used in both Spring and Postgres
+-----------------------------------------
+Responsiblities: 
+ - Holds the backend equivalent of a user
+External API:
+Getters, Setters
+Variable:
+id
+firstName
+lastName
+title
+contacts
+contactNum
+quote
+secret
+lastTheme
+symbol
+symbolColor
+cardColor
+textColor
+
+UserController.java
+-----------------------------------------
+Responsiblities: 
+ - Defines the API for calls to "/api/users/" and "/api/titles/"
+External API:
+getUsers  ${this.serverUrl}api/users/all
+addContact  ${this.serverUrl}api/users/addcontact/
+updateUsers  ${this.serverUrl}api/users/
+addUser  ${this.serverUrl}api/users/
+deleteUser  ${this.serverUrl}api/users/${user.id}
+searchUser  ${this.serverUrl}api/users/search/
+getTitles  ${this.serverUrl}api/titles/all/
+searchTitles  ${this.serverUrl}api/titles/search/
+attemptLogin_GetRole  ${this.serverUrl}login/get_role/
+getUserByID  ${this.serverUrl}api/users/${ID}/
+getUsersSearch  ${this.serverUrl}api/users/search/
+getTitlesSearch  ${this.serverUrl}api/titles/search/
+Connects To:
+UserService
+
+UserRepository.java
+-----------------------------------------
+Responsiblities: 
+ - Sets up API for connecting to the database. Is DAO layer.
+External API:
+getAllUsers
+getUsersByID
+updateUser
+addUser
+deleteUser
+searchUsers
+getAllTitles
+searchTitlesBy
+
+UserService.java
+-----------------------------------------
+Responsiblities: 
+ - Handles any necessary logic for users and titles calls between the rest endpoint to the data access endpoint.
+External API:
+getUser
+addContact   //call updateUsers
+updateUsers
+addUser
+deleteUser
+searchUser
+getTitles
+searchTitles
+attemptLogin_GetRole
+getUserByID
+getUsersSearch
+getTitlesSearch
+Connects To:
+WebSecurityConfig
+UserRepository
+
+WebSecurityConfig.java
+-----------------------------------------
+Responsiblities: 
+ - Configure CORS
+ - Assign allowed roles to the API
+ - Configure login and logout
+ - Handle changes to login information
+External API:
+attemptLoginAndGetRole
+changePassword
+addUserLogin
+logout?
+
+Themes.java
+-----------------------------------------
+Responsiblities: 
+ - Holds the backend equivalent of a theme
+Variable:
+inactiveTabColor
+activeTabColor
+toolbarColor
+searchBarColor
+logoutButtonColor
+backgroundColor
+textColor
+addUserColor
+editUserColor
+confirmThemeColor
+
+ThemeController.java
+-----------------------------------------
+Responsiblities: 
+ - Defines the API for calls to "/api/themes/"
+External API:
+getThemes  ${this.serverUrl}api/themes/all/
+updateThemes  ${this.serverUrl}api/themes/
+Connects To:
+ThemeService
+
+ThemeService.java
+-----------------------------------------
+Responsiblities: 
+ - Handles any necessary logic for theme calls between the rest endpoint to the data access endpoint.
+External API:
+getThemes
+updateThemes
+Connects To:
+ThemeRepository
+
+ThemeRepository.java
+-----------------------------------------
+Responsiblities: 
+ - Sets up API for connecting to the database. Is DAO layer.
+External API:
+getThemes
+updateThemes
+
+
