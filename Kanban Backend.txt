@@ -3,9 +3,8 @@ Kanban Backend
 Current Tasks
 -----------------------------------------
 
-
 #========================================
-Task #3: Implement Basic Code Skeleton
+Task #4: Fill Out the Skeleton
 Resolution: Not Started
 SubTasks: None
 #========================================
@@ -18,6 +17,12 @@ SubTasks: Task #3
 
 Finished Tasks
 -----------------------------------------
+
+#========================================
+Task #3: Implement Basic Code Skeleton
+Resolution: Finished
+SubTasks: Task #4
+#========================================
 
 #========================================
 Task #1: Make Back End Class Design
