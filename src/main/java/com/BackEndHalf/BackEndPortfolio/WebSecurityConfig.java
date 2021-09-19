@@ -34,13 +34,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
       .antMatchers(HttpMethod.POST, "/api/users/addcontact/").authenticated()
       .antMatchers(HttpMethod.DELETE, "/api/users/{id}").authenticated()//check user or if admin in controller
       .antMatchers(HttpMethod.GET, "/api/users/{ID}/").permitAll()   //delete
-      .antMatchers(HttpMethod.GET, "/api/users/search/").permitAll()
-      .antMatchers(HttpMethod.GET, "/api/users/search/").permitAll()
+      .antMatchers(HttpMethod.POST, "/api/users/search/").permitAll()
+      .antMatchers(HttpMethod.POST, "/api/users/search/").permitAll()
       .antMatchers(HttpMethod.POST, "/api/users/").authenticated() //check user in controller
       .antMatchers(HttpMethod.PUT, "/api/users/").permitAll()
       .antMatchers(HttpMethod.GET, "/api/titles/all/").permitAll()
-      .antMatchers(HttpMethod.GET, "/api/titles/search/").permitAll()
-      .antMatchers(HttpMethod.GET, "/api/titles/search/").permitAll()
+      .antMatchers(HttpMethod.POST, "/api/titles/search/").permitAll()
+      .antMatchers(HttpMethod.POST, "/api/titles/search/").permitAll()
       .antMatchers(HttpMethod.GET, "/api/themes/all/").permitAll()
       .antMatchers(HttpMethod.POST, "/api/themes/").hasAnyRole("ADMIN")
       .antMatchers(HttpMethod.GET, "/login/get_role/").permitAll()

@@ -1,9 +1,14 @@
 package com.BackEndHalf.BackEndPortfolio;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
@@ -16,11 +21,15 @@ public class ThemeController {
   }
 
   @GetMapping("/api/themes/all/")
-  public getThemes()  {
+  public ResponseEntity<List<Themes>> getThemes()  {
+    List<Themes> tempUsers = this.themeService.getThemes();
+    return new ResponseEntity<>(tempUsers, HttpStatus.OK);
     
   }
   @PostMapping("/api/themes/")
-  public updateThemes () {
+  public ResponseEntity<Themes> updateThemes (@RequestBody Themes theme) {
+    Themes tempThemes = themeService.updateThemes(theme);
+    return new ResponseEntity<>(tempThemes, HttpStatus.OK);
     
   }
 

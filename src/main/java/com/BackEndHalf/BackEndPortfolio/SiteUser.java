@@ -1,5 +1,7 @@
 package com.BackEndHalf.BackEndPortfolio;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,11 +14,11 @@ public class SiteUser {
   
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  private int id;
+  private Long id;
   private String firstName;
   private String lastName;
   private String title;
-  private SiteUser[] contacts;
+  private List<SiteUser> contacts;
   private int contactNum;
   private String quote;
   private String secret;
@@ -25,10 +27,11 @@ public class SiteUser {
   private String symbolColor;
   private String cardColor;
   private String textColor;
+  private String symbolBackgroundColor;
   
   public SiteUser() {
   }
-  public SiteUser(int id, String firstName, String lastName, String title, SiteUser[] contacts, int contactNum,
+  public SiteUser(Long id, String firstName, String lastName, String title, List<SiteUser> contacts, int contactNum,
       String quote, String secret, String lastTheme, char symbol, String symbolColor, String cardColor,
       String textColor) {
     this.id = id;
@@ -45,11 +48,8 @@ public class SiteUser {
     this.cardColor = cardColor;
     this.textColor = textColor;
   }
-  public int getId() {
+  public Long getId() {
     return id;
-  }
-  public void setId(int id) {
-    this.id = id;
   }
   public String getFirstName() {
     return firstName;
@@ -69,10 +69,10 @@ public class SiteUser {
   public void setTitle(String title) {
     this.title = title;
   }
-  public SiteUser[] getContacts() {
+  public List<SiteUser> getContacts() {
     return contacts;
   }
-  public void setContacts(SiteUser[] contacts) {
+  public void setContacts(List<SiteUser> contacts) {
     this.contacts = contacts;
   }
   public int getContactNum() {
@@ -123,5 +123,12 @@ public class SiteUser {
   public void setTextColor(String textColor) {
     this.textColor = textColor;
   }
+  public String getSymbolBackgroundColor() {
+    return symbolBackgroundColor;
+  }
+  public void setSymbolBackgroundColor(String symbolBackgroundColor) {
+    this.symbolBackgroundColor = symbolBackgroundColor;
+  }
+  
 
 }

@@ -5,6 +5,12 @@ Current Tasks
 
 #========================================
 Task #4: Fill Out the Skeleton
+Resolution: In Progress
+SubTasks: Task #5
+#========================================
+
+#========================================
+Task #5: Implement Login Logic
 Resolution: Not Started
 SubTasks: None
 #========================================

@@ -1,6 +1,18 @@
 package com.BackEndHalf.BackEndPortfolio;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table
 public class Themes {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  private Long id;
   private String inactiveTabColor;
   private String activeTabColor;
   private String toolbarColor;
@@ -26,6 +38,9 @@ public class Themes {
     this.addUserColor = addUserColor;
     this.editUserColor = editUserColor;
     this.confirmThemeColor = confirmThemeColor;
+  }
+  public Long getId() {
+    return id;
   }
   public String getInactiveTabColor() {
     return inactiveTabColor;

@@ -1,5 +1,7 @@
 package com.BackEndHalf.BackEndPortfolio;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +17,20 @@ public class ThemeService {
       this.webSecurityConfig = webSecurityConfig;
   }
 
-  public getThemes() {
-
+  public List<Themes> getThemes() {
+    return themeRepository.findAll();
   }
-  public updateThemes() {
+  public Themes updateThemes(Themes theme) {
+    Themes oldTheme = themeRepository.findById(theme.getId()).orElse(null);
+    if (oldTheme != null) {
+        // oldUser.setAll(user);
+        // userRepository.save(oldUser);
+        themeRepository.save(theme);
+        return theme;
+    } else {
+        // userRepository.save(user);
+        return null;
+    }
     
   }
 
