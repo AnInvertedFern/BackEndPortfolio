@@ -2,6 +2,7 @@ package com.BackEndHalf.BackEndPortfolio;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,9 @@ public class UserService {
       this.userRepository = userRepository;
       this.webSecurityConfig = webSecurityConfig;
   }
+  List<SiteUser> tempUsers;
   public List<SiteUser> getUsers() {
+    this.tempUsers = userRepository.findAll();
     return userRepository.findAll();
   }
   public SiteUser addContact(SiteUser userAddTo, SiteUser userToAdd) {
@@ -26,7 +29,9 @@ public class UserService {
     if (oldUserAddTo != null) {
         // oldUser.setAll(user);
         // userRepository.save(oldUser);
-        oldUserAddTo.getContacts().add(userToAdd);
+        List<SiteUser> tempContacts = Arrays.asList(oldUserAddTo.getContacts());
+        tempContacts.add(userToAdd);
+        oldUserAddTo.setContacts( (SiteUser[]) tempContacts.toArray() );
         oldUserAddTo.setContactNum(oldUserAddTo.getContactNum()+1);
         userRepository.save(oldUserAddTo);
         return oldUserAddTo;
@@ -81,7 +86,9 @@ public class UserService {
         index++;
       }
       if (titlesIndex == -1) {
-        titlesSeen.add( new Title(user.getTitle(), new ArrayList<SiteUser>()) );
+        List<SiteUser> tempUsers = new ArrayList<SiteUser>();
+        tempUsers.add(user);
+        titlesSeen.add( new Title( user.getTitle(), tempUsers ) );
       }
     }
     return titlesSeen;
@@ -97,7 +104,7 @@ public class UserService {
     return userRepository.findById(userID).orElse(null);
   }
   public List<SiteUser> getUsersSearch(String query) {
-    return userRepository.findAllByAll(query,query,query,query);
+    return userRepository.findAllByAll(query);
     
   }
   public List<Title> getTitlesSearch(String query) {
@@ -105,5 +112,13 @@ public class UserService {
     return constructTItles(searchedUsers);
     
   }
+  
+  // public TitlesReply getTitlesSearch(String query) {
+  //   List<SiteUser> searchedUsers= userRepository.findAllByTitle(query);
+  //   List<Title> searchedTitles=  constructTItles(searchedUsers);
+  //   TitlesReply response = new TitlesReply("", true, searchedTitles, getTitles());
+  //   return response;
+    
+  // }
 
 }

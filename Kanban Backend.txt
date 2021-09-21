@@ -5,7 +5,7 @@ Current Tasks
 
 #========================================
 Task #4: Fill Out the Skeleton
-Resolution: In Progress
+Resolution: Done Except for login Information Filtering
 SubTasks: Task #5
 #========================================
 

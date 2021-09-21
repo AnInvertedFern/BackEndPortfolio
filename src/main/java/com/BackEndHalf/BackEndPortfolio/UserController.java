@@ -1,6 +1,7 @@
 package com.BackEndHalf.BackEndPortfolio;
 
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
@@ -24,10 +26,12 @@ public class UserController {
       this.userService = userService;
   }
   @GetMapping("/api/users/all")
-  public ResponseEntity<List<SiteUser>> getUsers()  {
+  public ResponseEntity<UserReply> getUsers()  {
     List<SiteUser> tempUsers = this.userService.getUsers();
     for (SiteUser tempUser : tempUsers) {System.out.println( tempUser.toString() ); }
-    return new ResponseEntity<>(tempUsers, HttpStatus.OK);
+    UserReply response = new UserReply();
+    response.setAllUsers(tempUsers);
+    return new ResponseEntity<>(response, HttpStatus.OK);
     
   }
   @PostMapping("/api/users/addcontact/")
@@ -37,21 +41,27 @@ public class UserController {
     
   }
   @PostMapping("/api/users/")
-  public ResponseEntity<SiteUser>  updateUser (@RequestBody SiteUser user) {
+  public ResponseEntity<UserReply>  updateUser (@RequestBody SiteUser user) {
     SiteUser tempUsers = userService.updateUsers(user);
-    return new ResponseEntity<>(tempUsers, HttpStatus.OK);
+    UserReply response = new UserReply();
+    response.setUsers( Arrays.asList(tempUsers) );
+    return new ResponseEntity<>(response, HttpStatus.OK);
 
   }
   @PutMapping("/api/users/")
-  public ResponseEntity<SiteUser> addUser (@RequestBody SiteUser user) {
-    SiteUser tempUsers = userService.addUser(user);
-    return new ResponseEntity<>(tempUsers, HttpStatus.OK);
+  public ResponseEntity<UserReply> addUser (@RequestBody RESTRequest request) {
+    SiteUser tempUsers = userService.addUser(request.getPrimaryUser());
+    UserReply response = new UserReply();
+    response.setUsers( Arrays.asList(tempUsers) );
+    return new ResponseEntity<>(response, HttpStatus.OK);
     
   }
   @DeleteMapping("/api/users/{id}")
-  public ResponseEntity<String> deleteUser (@PathVariable Long userID) {
+  public ResponseEntity<UserReply> deleteUser (@PathVariable(value="id") Long userID) {
     String stringResponse = userService.deleteUser(userID);
-    return new ResponseEntity<>(stringResponse, HttpStatus.OK);
+    UserReply response = new UserReply();
+    response.setMessage( Long.toString(userID) );
+    return new ResponseEntity<>(response, HttpStatus.OK);
     
   }
 
@@ -60,10 +70,12 @@ public class UserController {
     
   // }
   @GetMapping("/api/titles/all/")
-  public ResponseEntity<List<Title>> getTitles()  {
+  public ResponseEntity<TitlesReply> getTitles()  {
     List<Title> tempTitles = this.userService.getTitles();
     for (Title tempTitle : tempTitles) {System.out.println( tempTitle.toString() ); }
-    return new ResponseEntity<>(tempTitles, HttpStatus.OK);
+    TitlesReply response = new TitlesReply();
+    response.setAllTitles(tempTitles);
+    return new ResponseEntity<>(response, HttpStatus.OK);
     
   }
   // @PostMapping("/api/titles/search/")
@@ -81,15 +93,23 @@ public class UserController {
     return new ResponseEntity<>(tempUsers, HttpStatus.OK);
   }
   @PostMapping("/api/users/search/")
-  public ResponseEntity<List<SiteUser>> getUsersSearch (@RequestBody String query) {
+  public ResponseEntity<UserReply> getUsersSearch (@RequestParam(value="searchValue") String query) {
+    for (int i =0; i<10;i++){System.out.println(query);}
     List<SiteUser> tempUsers = this.userService.getUsersSearch(query);
-    return new ResponseEntity<>(tempUsers, HttpStatus.OK);
+    UserReply response = new UserReply();
+    response.setUsers(tempUsers);
+    // response.setAllUsers(userService.getUsers()); 
+    return new ResponseEntity<>(response, HttpStatus.OK);
     
   }
   @PostMapping("/api/titles/search/")
-  public ResponseEntity<List<Title>> getTitlesSearch (@RequestBody String query) {
+  public ResponseEntity<TitlesReply> getTitlesSearch (@RequestParam(value="searchValue")  String query) {
+    for (int i =0; i<10;i++){System.out.println(query);}
     List<Title> tempTitles = this.userService.getTitlesSearch(query);
-    return new ResponseEntity<>(tempTitles, HttpStatus.OK);
+    TitlesReply response = new TitlesReply();
+    response.setTitles(tempTitles);
+    response.setAllTitles(userService.getTitles()); 
+    return new ResponseEntity<>(response, HttpStatus.OK);
     
   }
 

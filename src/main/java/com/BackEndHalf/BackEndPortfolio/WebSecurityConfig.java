@@ -31,12 +31,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		http.cors().and()
 			.authorizeRequests()
       .antMatchers(HttpMethod.GET, "/api/users/all").permitAll()
-      .antMatchers(HttpMethod.POST, "/api/users/addcontact/").authenticated()
-      .antMatchers(HttpMethod.DELETE, "/api/users/{id}").authenticated()//check user or if admin in controller
+      .antMatchers(HttpMethod.POST, "/api/users/addcontact/").permitAll()//.authenticated()
+      .antMatchers(HttpMethod.DELETE, "/api/users/{id}").permitAll()//.authenticated()//check user or if admin in controller
       .antMatchers(HttpMethod.GET, "/api/users/{ID}/").permitAll()   //delete
       .antMatchers(HttpMethod.POST, "/api/users/search/").permitAll()
       .antMatchers(HttpMethod.POST, "/api/users/search/").permitAll()
-      .antMatchers(HttpMethod.POST, "/api/users/").authenticated() //check user in controller
+      .antMatchers(HttpMethod.POST, "/api/users/").permitAll()//.authenticated() //check user in controller
+      //.authenticated still lets people update users without being logged in for some reason
       .antMatchers(HttpMethod.PUT, "/api/users/").permitAll()
       .antMatchers(HttpMethod.GET, "/api/titles/all/").permitAll()
       .antMatchers(HttpMethod.POST, "/api/titles/search/").permitAll()

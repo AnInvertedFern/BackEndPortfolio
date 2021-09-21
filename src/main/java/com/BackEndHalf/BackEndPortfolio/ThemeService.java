@@ -20,6 +20,10 @@ public class ThemeService {
   public List<Themes> getThemes() {
     return themeRepository.findAll();
   }
+  public Themes addTheme(Themes theme) {
+    themeRepository.save(theme);
+    return theme;
+  }
   public Themes updateThemes(Themes theme) {
     Themes oldTheme = themeRepository.findById(theme.getId()).orElse(null);
     if (oldTheme != null) {

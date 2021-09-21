@@ -1,5 +1,6 @@
 package com.BackEndHalf.BackEndPortfolio;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -18,7 +19,7 @@ public class SiteUser {
   private String firstName;
   private String lastName;
   private String title;
-  private List<SiteUser> contacts;
+  private SiteUser[] contacts;
   private int contactNum;
   private String quote;
   private String secret;
@@ -31,10 +32,9 @@ public class SiteUser {
   
   public SiteUser() {
   }
-  public SiteUser(Long id, String firstName, String lastName, String title, List<SiteUser> contacts, int contactNum,
+  public SiteUser(String firstName, String lastName, String title, SiteUser[] contacts, int contactNum,
       String quote, String secret, String lastTheme, char symbol, String symbolColor, String cardColor,
-      String textColor) {
-    this.id = id;
+      String textColor, String symbolBackgroundColor) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.title = title;
@@ -47,6 +47,7 @@ public class SiteUser {
     this.symbolColor = symbolColor;
     this.cardColor = cardColor;
     this.textColor = textColor;
+    this.symbolBackgroundColor = symbolBackgroundColor;
   }
   public Long getId() {
     return id;
@@ -69,10 +70,10 @@ public class SiteUser {
   public void setTitle(String title) {
     this.title = title;
   }
-  public List<SiteUser> getContacts() {
+  public SiteUser[] getContacts() {
     return contacts;
   }
-  public void setContacts(List<SiteUser> contacts) {
+  public void setContacts(SiteUser[] contacts) {
     this.contacts = contacts;
   }
   public int getContactNum() {
@@ -128,6 +129,13 @@ public class SiteUser {
   }
   public void setSymbolBackgroundColor(String symbolBackgroundColor) {
     this.symbolBackgroundColor = symbolBackgroundColor;
+  }
+  @Override
+  public String toString() {
+    return "SiteUser [cardColor=" + cardColor + ", contactNum=" + contactNum + ", contacts=" + Arrays.toString(contacts)
+        + ", firstName=" + firstName + ", id=" + id + ", lastName=" + lastName + ", lastTheme=" + lastTheme + ", quote="
+        + quote + ", secret=" + secret + ", symbol=" + symbol + ", symbolBackgroundColor=" + symbolBackgroundColor
+        + ", symbolColor=" + symbolColor + ", textColor=" + textColor + ", title=" + title + "]";
   }
   
 
