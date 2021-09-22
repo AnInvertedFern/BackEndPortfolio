@@ -1,5 +1,6 @@
 package com.BackEndHalf.BackEndPortfolio;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,8 @@ public class ThemeController {
     
   }
   @PostMapping("/api/themes/")
-  public ResponseEntity<Themes> updateThemes (@RequestBody Themes theme) {
-    Themes tempThemes = themeService.updateThemes(theme);
+  public ResponseEntity<Themes> updateThemes (@RequestBody Themes theme, Principal userLoggedIn) {
+    Themes tempThemes = themeService.updateThemes(theme, userLoggedIn);
     return new ResponseEntity<>(tempThemes, HttpStatus.OK);
     
   }

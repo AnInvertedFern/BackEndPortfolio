@@ -4,25 +4,31 @@ Current Tasks
 -----------------------------------------
 
 #========================================
-Task #4: Fill Out the Skeleton
-Resolution: Done Except for login Information Filtering
-SubTasks: Task #5
-#========================================
-
-#========================================
-Task #5: Implement Login Logic
-Resolution: Not Started
-SubTasks: None
-#========================================
-
-#========================================
 Task #2: Design Unit and Intergration Tests
 Resolution: Not Started
 SubTasks: Task #3
 #========================================
 
+#========================================
+Task #6: Polish Code
+Resolution: Not Started
+SubTasks: None
+#========================================
+
 Finished Tasks
 -----------------------------------------
+
+#========================================
+Task #4: Fill Out the Skeleton
+Resolution: Finished
+SubTasks: Task #5
+#========================================
+
+#========================================
+Task #5: Implement Login Logic
+Resolution: Finished
+SubTasks: None
+#========================================
 
 #========================================
 Task #3: Implement Basic Code Skeleton

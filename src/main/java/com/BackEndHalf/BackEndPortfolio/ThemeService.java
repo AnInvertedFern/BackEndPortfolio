@@ -1,5 +1,6 @@
 package com.BackEndHalf.BackEndPortfolio;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class ThemeService {
     themeRepository.save(theme);
     return theme;
   }
-  public Themes updateThemes(Themes theme) {
+  public Themes updateThemes(Themes theme, Principal userLoggedIn) {
     Themes oldTheme = themeRepository.findById(theme.getId()).orElse(null);
     if (oldTheme != null) {
         // oldUser.setAll(user);

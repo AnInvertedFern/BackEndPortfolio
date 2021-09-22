@@ -19,11 +19,11 @@ public class SiteUser {
   private String firstName;
   private String lastName;
   private String title;
-  private SiteUser[] contacts;
+  private Long[] contacts;
   private int contactNum;
   private String quote;
   private String secret;
-  private String lastTheme;
+  private int lastTheme;
   private char symbol;
   private String symbolColor;
   private String cardColor;
@@ -32,8 +32,8 @@ public class SiteUser {
   
   public SiteUser() {
   }
-  public SiteUser(String firstName, String lastName, String title, SiteUser[] contacts, int contactNum,
-      String quote, String secret, String lastTheme, char symbol, String symbolColor, String cardColor,
+  public SiteUser(String firstName, String lastName, String title, Long[] contacts, int contactNum,
+      String quote, String secret, int lastTheme, char symbol, String symbolColor, String cardColor,
       String textColor, String symbolBackgroundColor) {
     this.firstName = firstName;
     this.lastName = lastName;
@@ -70,10 +70,10 @@ public class SiteUser {
   public void setTitle(String title) {
     this.title = title;
   }
-  public SiteUser[] getContacts() {
+  public Long[] getContacts() {
     return contacts;
   }
-  public void setContacts(SiteUser[] contacts) {
+  public void setContacts(Long[] contacts) {
     this.contacts = contacts;
   }
   public int getContactNum() {
@@ -94,10 +94,10 @@ public class SiteUser {
   public void setSecret(String secret) {
     this.secret = secret;
   }
-  public String getLastTheme() {
+  public int getLastTheme() {
     return lastTheme;
   }
-  public void setLastTheme(String lastTheme) {
+  public void setLastTheme(int lastTheme) {
     this.lastTheme = lastTheme;
   }
   public char getSymbol() {

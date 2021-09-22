@@ -23,6 +23,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
+
+  private InMemoryUserDetailsManager userDetails;
+
   @Override
 	protected void configure(HttpSecurity http) throws Exception {
     //withHttpOnlyFalse();
@@ -45,31 +48,42 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
       .antMatchers(HttpMethod.GET, "/api/themes/all/").permitAll()
       .antMatchers(HttpMethod.POST, "/api/themes/").hasAnyRole("ADMIN")
       .antMatchers(HttpMethod.GET, "/login/get_role/").permitAll()
+      .antMatchers(HttpMethod.GET, "/logout/").permitAll()
+      .antMatchers(HttpMethod.GET, "/logout/give_response/").permitAll()
 				.and()
 			.formLogin()
 				// .loginPage("/login")
-				.loginProcessingUrl("/login")
+				.loginProcessingUrl("/login/get_role/")
                 .permitAll()
 				.and()
             // .csrf().disable()
             .csrf(csrf -> csrf.disable())
             .httpBasic().and()
 			.logout()
+        .logoutUrl("/logout/")
+        .logoutSuccessUrl("/logout/give_response/")
 				.permitAll();
 	}
 
 	@Bean
 	@Override
 	public UserDetailsService userDetailsService() {
-		UserDetails user =
-			 User.withDefaultPasswordEncoder()
-				.username("user")
-				.password("password")
-				.roles("ADMIN")
-				.build();
+		// UserDetails user =
+		// 	 User.withDefaultPasswordEncoder()
+		// 		.username("1")
+		// 		.password("password")
+		// 		.roles("ADMIN")
+		// 		.build();
 
-		return new InMemoryUserDetailsManager(user);
+    userDetails = new InMemoryUserDetailsManager();
+		return userDetails;
 	}
+  public InMemoryUserDetailsManager getUserDetails() {
+    return userDetails;
+  }
+  public void setUserDetails(InMemoryUserDetailsManager userDetails) {
+    this.userDetails = userDetails;
+  }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
