@@ -138,9 +138,9 @@ public class UserController {
   //   return new ResponseEntity<>(tempUsers, HttpStatus.OK);
   // }
   @PostMapping("/api/users/search/")
-  public ResponseEntity<UserReply> getUsersSearch (@RequestParam(value="searchValue") String query) {
+  public ResponseEntity<UserReply> getUsersSearch (@RequestParam(value="searchValue") String query, Principal userLoggedIn) {
     for (int i =0; i<10;i++){System.out.println(query);}
-    List<SiteUser> tempUsers = this.userService.getUsersSearch(query);
+    List<SiteUser> tempUsers = this.userService.getUsersSearch(query, userLoggedIn);
     UserReply response = new UserReply();
     response.setUsers(tempUsers);
     // response.setAllUsers(userService.getUsers()); 

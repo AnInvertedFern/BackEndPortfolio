@@ -1,6 +1,7 @@
 package com.BackEndHalf.BackEndPortfolio;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -11,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table
-public class SiteUser {
+public class SiteUser implements Comparator<SiteUser> {
   
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -130,6 +131,11 @@ public class SiteUser {
   public void setSymbolBackgroundColor(String symbolBackgroundColor) {
     this.symbolBackgroundColor = symbolBackgroundColor;
   }
+
+  public int compare(SiteUser user1, SiteUser user2) {
+    return user1.getId().compareTo(user2.getId());
+  }
+
   @Override
   public String toString() {
     return "SiteUser [cardColor=" + cardColor + ", contactNum=" + contactNum + ", contacts=" + Arrays.toString(contacts)

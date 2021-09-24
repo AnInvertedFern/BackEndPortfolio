@@ -1,9 +1,12 @@
 package com.BackEndHalf.BackEndPortfolio;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.User;
 
 @SpringBootApplication
@@ -20,9 +23,17 @@ public class BackEndPortfolioApplication implements CommandLineRunner {
 	ThemeService themeService;
 	@Autowired
 	WebSecurityConfig webSecurityConfig;
+	@Autowired
+	DataSource dataSource;
 
 	@Override
 	public void run(String... args) {
+
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		jdbcTemplate.update("DROP TABLE IF EXISTS users CASCADE");
+		jdbcTemplate.update("DROP TABLE IF EXISTS authorities");
+		jdbcTemplate.update("CREATE TABLE users ( username varchar(255) NOT NULL, password varchar(255) NOT NULL, enabled boolean NOT NULL, PRIMARY KEY (username) )");
+		jdbcTemplate.update("CREATE TABLE authorities ( username varchar(255) NOT NULL, authority varchar(255) NOT NULL, PRIMARY KEY (username, authority), FOREIGN KEY (username) REFERENCES users (username) ) ");
 
 		Themes tempTheme = new Themes(
 			"blue",

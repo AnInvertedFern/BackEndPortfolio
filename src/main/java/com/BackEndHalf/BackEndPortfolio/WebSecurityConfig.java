@@ -2,6 +2,9 @@ package com.BackEndHalf.BackEndPortfolio;
 
 import java.util.Arrays;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,6 +14,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -24,7 +28,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
-  private InMemoryUserDetailsManager userDetails;
+  // private InMemoryUserDetailsManager userDetails;
+  private JdbcUserDetailsManager userDetails;
+
+  @Autowired
+  private final DataSource datasource;
+  public WebSecurityConfig (DataSource datasource) {
+    this.datasource = datasource;
+    
+  }
 
   @Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -46,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
       .antMatchers(HttpMethod.POST, "/api/titles/search/").permitAll()
       .antMatchers(HttpMethod.POST, "/api/titles/search/").permitAll()
       .antMatchers(HttpMethod.GET, "/api/themes/all/").permitAll()
-      .antMatchers(HttpMethod.POST, "/api/themes/").hasAnyRole("ADMIN")
+      .antMatchers(HttpMethod.POST, "/api/themes/").permitAll()//.hasAnyRole("ADMIN")
       .antMatchers(HttpMethod.GET, "/login/get_role/").permitAll()
       .antMatchers(HttpMethod.GET, "/logout/").permitAll()
       .antMatchers(HttpMethod.GET, "/logout/give_response/").permitAll()
@@ -75,13 +87,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		// 		.roles("ADMIN")
 		// 		.build();
 
-    userDetails = new InMemoryUserDetailsManager();
+    // userDetails = new InMemoryUserDetailsManager();
+    userDetails = new JdbcUserDetailsManager(this.datasource);
 		return userDetails;
 	}
-  public InMemoryUserDetailsManager getUserDetails() {
+  public JdbcUserDetailsManager getUserDetails() {
     return userDetails;
   }
-  public void setUserDetails(InMemoryUserDetailsManager userDetails) {
+  public void setUserDetails(JdbcUserDetailsManager userDetails) {
     this.userDetails = userDetails;
   }
 

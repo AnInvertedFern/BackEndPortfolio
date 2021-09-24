@@ -1,5 +1,7 @@
 package com.BackEndHalf.BackEndPortfolio;
 
+import java.util.Comparator;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table
-public class Themes {
+public class Themes implements Comparator<Themes> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -101,6 +103,18 @@ public class Themes {
   }
   public void setConfirmThemeColor(String confirmThemeColor) {
     this.confirmThemeColor = confirmThemeColor;
+  }
+
+  public int compare(Themes theme1, Themes theme2) {
+    return theme1.getId().compareTo(theme2.getId());
+  }
+
+  @Override
+  public String toString() {
+    return "Themes [activeTabColor=" + activeTabColor + ", addUserColor=" + addUserColor + ", backgroundColor="
+        + backgroundColor + ", confirmThemeColor=" + confirmThemeColor + ", editUserColor=" + editUserColor + ", id="
+        + id + ", inactiveTabColor=" + inactiveTabColor + ", logoutButtonColor=" + logoutButtonColor
+        + ", searchBarColor=" + searchBarColor + ", textColor=" + textColor + ", toolbarColor=" + toolbarColor + "]";
   }
   
 }

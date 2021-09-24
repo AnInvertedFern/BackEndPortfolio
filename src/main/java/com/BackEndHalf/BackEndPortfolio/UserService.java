@@ -30,6 +30,7 @@ public class UserService {
   public List<SiteUser> getUsers(Principal userLoggedIn) {
     // this.tempUsers = userRepository.findAll();
     List<SiteUser> tempUsers = userRepository.findAll();
+    tempUsers.sort(new SiteUser() );
     // System.out.println(tempUsers.size());
     tempUsers = filterInfoByUserAndRole(tempUsers, userLoggedIn);
     // System.out.println(tempUsers.toString());
@@ -68,6 +69,9 @@ public class UserService {
     return users;
   }
   private boolean checkDuplicateContactsAndLogin(SiteUser userAddTo, SiteUser userToAdd, Principal userDetails) {
+    if (userDetails == null) { 
+      return false;
+    }
     if (!userToAdd.getId().equals(Long.parseLong(userDetails.getName())) ) {
       return false;
     }
@@ -107,6 +111,9 @@ public class UserService {
     
   }   //call updateUsers
   private boolean checkUpdateUserSelfPermissionAndFields(SiteUser user, Principal userDetails) {
+    if (userDetails == null) { 
+      return false;
+    }
     System.out.println(user.toString());
     System.out.println(userDetails);
     System.out.println(userDetails.getName());
@@ -235,6 +242,9 @@ public class UserService {
     
   }
   private boolean checkDeleteUserPermissions(Long userID, Principal userDetails) {
+    if (userDetails == null) { 
+      return false;
+    }
     if (!userID.equals(Long.parseLong(userDetails.getName())) && !getIsAdmin(userDetails)) {
       return false;
     }
@@ -255,7 +265,9 @@ public class UserService {
   // }
   public List<Title> getTitles() {
     List<SiteUser> allUsers= userRepository.findAll();
-    return constructTItles(allUsers);
+    List<Title> tempTitles= constructTItles(allUsers);
+    tempTitles.sort(new Title() );
+    return tempTitles;
 
   }
   private List<Title> constructTItles( List<SiteUser> allUsers ){
@@ -285,16 +297,21 @@ public class UserService {
   public SiteUser attemptLogin_GetRole(Principal user) {
     return userRepository.findById( Long.parseLong(user.getName()) ).orElse(null);
   }
-  public SiteUser getUserByID(Long userID) {
-    return userRepository.findById(userID).orElse(null);
-  }
-  public List<SiteUser> getUsersSearch(String query) {
-    return userRepository.findAllByAll(query);
+  // public SiteUser getUserByID(Long userID) {
+  //   return userRepository.findById(userID).orElse(null);
+  // }
+  public List<SiteUser> getUsersSearch(String query, Principal userLoggedIn) {
+    List<SiteUser> tempUsers = userRepository.findAllByAll(query);
+    tempUsers.sort(new SiteUser() );
+    tempUsers = filterInfoByUserAndRole(tempUsers, userLoggedIn);
+    return tempUsers;
     
   }
   public List<Title> getTitlesSearch(String query) {
     List<SiteUser> searchedUsers= userRepository.findAllByTitle(query);
-    return constructTItles(searchedUsers);
+    List<Title> tempTitles= constructTItles(searchedUsers);
+    tempTitles.sort(new Title() );
+    return tempTitles;
     
   }
   
