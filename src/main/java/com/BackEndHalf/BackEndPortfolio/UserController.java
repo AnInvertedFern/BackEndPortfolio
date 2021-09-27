@@ -37,10 +37,23 @@ public class UserController {
     System.out.println("Received A getUsers Request");
     // if (userLoggedIn != null) {System.out.println(userLoggedIn.toString());}
     // else {System.out.println("userLoggedIn was null");}
-    List<SiteUser> tempUsers = this.userService.getUsers(userLoggedIn);
+
+    boolean success = true;
+    List<SiteUser> tempUsers = null;
+    try{
+      tempUsers = this.userService.getUsers(userLoggedIn);
+    } catch (Exception e) {
+      success = false;
+    } finally {
+      if (tempUsers == null) { success = false; }
+    }
+    
     // for (SiteUser tempUser : tempUsers) {System.out.println( tempUser.toString() ); }
     UserReply response = new UserReply();
+    
     response.setAllUsers(tempUsers);
+    response.setSuccess(success);
+    
     return new ResponseEntity<>(response, HttpStatus.OK);
     
   }
@@ -48,40 +61,92 @@ public class UserController {
   public ResponseEntity<UserReply> addContact (@RequestBody RESTRequest request, Principal userLoggedIn) {
     System.out.println("Received A addContact Request");
     // System.out.println(request.getPrimaryUser().getId() + ", " + request.getSecondaryUser().getId());
-    SiteUser tempUsers = this.userService.addContact(request.getPrimaryUser(), request.getSecondaryUser(), userLoggedIn);
+    boolean success = true;
+    SiteUser tempUsers = null;
+    try{
+      tempUsers = this.userService.addContact(request.getPrimaryUser(), request.getSecondaryUser(), userLoggedIn);
+    } catch (Exception e) {
+      success = false;
+    } finally {
+      if (tempUsers == null) { success = false; }
+    }
     UserReply response = new UserReply();
     response.setUsers( Arrays.asList(tempUsers) );
+    response.setSuccess(success);
     return new ResponseEntity<>(response, HttpStatus.OK);
     
   }
   @PostMapping("/api/users/")
   public ResponseEntity<UserReply>  updateUser (@RequestBody SiteUser user, Principal userLoggedIn) {
-    SiteUser tempUsers = userService.updateUsers(user, userLoggedIn);
+    boolean success = true;
+    SiteUser tempUsers = null;
+    try{
+      tempUsers = userService.updateUsers(user, userLoggedIn);
+    } catch (Exception e) {
+      success = false;
+    } finally {
+      if (tempUsers == null) { success = false; }
+    }
+
+
     UserReply response = new UserReply();
     response.setUsers( Arrays.asList(tempUsers) );
+    response.setSuccess(success);
     return new ResponseEntity<>(response, HttpStatus.OK);
 
   }
   @PutMapping("/api/users/")
-  public ResponseEntity<UserReply> addUser (@RequestBody RESTRequest request) {
-    SiteUser tempUsers = userService.addUser(request.getPrimaryUser());
-    if (tempUsers != null) {
-      webSecurityConfig.getUserDetails().createUser(User.withDefaultPasswordEncoder()
-       .username( Long.toString( tempUsers.getId()) )
-       .password(request.getMessage())
-       .roles("USER")
-       .build() );
+  public ResponseEntity<UserReply> addUser (@RequestBody RESTRequest request) throws Exception {
+    boolean success = true;
+    SiteUser tempUsers = null;
+    try{
+      tempUsers = userService.addUser(request.getPrimaryUser());
+    } catch (Exception e) {
+      success = false;
+    } finally {
+      if (tempUsers == null) { success = false; }
+    }
+
+    if (tempUsers != null && success) {
+      try {
+
+        webSecurityConfig.getUserDetails().createUser(User.withDefaultPasswordEncoder()
+        .username( Long.toString( tempUsers.getId()) )
+        .password(request.getMessage())
+        .roles("USER")
+        .build() );
+
+      } catch (Exception e) {
+
+        success = false;
+        try {
+          userService.removeUserOnFail(request.getPrimaryUser().getId());
+        } catch (Exception f) {
+          throw new Exception();
+        }
+
+      }
     }
     UserReply response = new UserReply();
     response.setUsers( Arrays.asList(tempUsers) );
+    response.setSuccess(success);
     return new ResponseEntity<>(response, HttpStatus.OK);
     
   }
   @DeleteMapping("/api/users/{id}")
   public ResponseEntity<UserReply> deleteUser (@PathVariable(value="id") Long userID, Principal userLoggedIn) {
-    String stringResponse = userService.deleteUser(userID, userLoggedIn);
+    boolean success = true;
+    String stringResponse = null;
+    try{
+      stringResponse = userService.deleteUser(userID, userLoggedIn);
+    } catch (Exception e) {
+      success = false;
+    } finally {
+      if (stringResponse == null) { success = false; }
+    }
     UserReply response = new UserReply();
     response.setMessage( Long.toString(userID) );
+    response.setSuccess(success);
     return new ResponseEntity<>(response, HttpStatus.OK);
     
   }
@@ -92,10 +157,19 @@ public class UserController {
   // }
   @GetMapping("/api/titles/all/")
   public ResponseEntity<TitlesReply> getTitles()  {
-    List<Title> tempTitles = this.userService.getTitles();
+    boolean success = true;
+    List<Title> tempTitles = null;
+    try{
+      tempTitles = this.userService.getTitles();
+    } catch (Exception e) {
+      success = false;
+    } finally {
+      if (tempTitles == null) { success = false; }
+    }
     for (Title tempTitle : tempTitles) {System.out.println( tempTitle.toString() ); }
     TitlesReply response = new TitlesReply();
     response.setAllTitles(tempTitles);
+    response.setSuccess(success);
     return new ResponseEntity<>(response, HttpStatus.OK);
     
   }
@@ -109,15 +183,26 @@ public class UserController {
     if (userLoggedIn != null) {
       for (int i =0; i<10;i++){System.out.println("userLoggedIn: " + userLoggedIn.toString());}
     }
-    SiteUser tempUsers = userService.attemptLogin_GetRole(userLoggedIn);
+    boolean success = true;
+    SiteUser tempUsers = null;
+    try{
+      tempUsers = userService.attemptLogin_GetRole(userLoggedIn);
+    } catch (Exception e) {
+      success = false;
+    } finally {
+      if (tempUsers == null) { success = false; }
+    }
     boolean isAdmin = false;
-    Collection<GrantedAuthority> roles = ((UsernamePasswordAuthenticationToken) userLoggedIn ).getAuthorities();
-    for (GrantedAuthority authority : roles) {
-      if (authority.getAuthority().equals("ROLE_ADMIN")) {
-        isAdmin = true;
+    Collection<GrantedAuthority> roles = null;
+    if (success) {
+      roles = ((UsernamePasswordAuthenticationToken) userLoggedIn ).getAuthorities();
+      for (GrantedAuthority authority : roles) {
+        if (authority.getAuthority().equals("ROLE_ADMIN")) {
+          isAdmin = true;
+        }
       }
     }
-    GetRoleReply response = new GetRoleReply("", true, isAdmin, tempUsers);
+    GetRoleReply response = new GetRoleReply("", success, isAdmin, tempUsers);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
   @GetMapping("/logout/")
@@ -140,9 +225,18 @@ public class UserController {
   @PostMapping("/api/users/search/")
   public ResponseEntity<UserReply> getUsersSearch (@RequestParam(value="searchValue") String query, Principal userLoggedIn) {
     for (int i =0; i<10;i++){System.out.println(query);}
-    List<SiteUser> tempUsers = this.userService.getUsersSearch(query, userLoggedIn);
+    boolean success = true;
+    List<SiteUser> tempUsers = null;
+    try{
+      tempUsers = this.userService.getUsersSearch(query, userLoggedIn);
+    } catch (Exception e) {
+      success = false;
+    } finally {
+      if (tempUsers == null) { success = false; }
+    }
     UserReply response = new UserReply();
     response.setUsers(tempUsers);
+    response.setSuccess(success);
     // response.setAllUsers(userService.getUsers()); 
     return new ResponseEntity<>(response, HttpStatus.OK);
     
@@ -150,10 +244,29 @@ public class UserController {
   @PostMapping("/api/titles/search/")
   public ResponseEntity<TitlesReply> getTitlesSearch (@RequestParam(value="searchValue")  String query) {
     for (int i =0; i<10;i++){System.out.println(query);}
-    List<Title> tempTitles = this.userService.getTitlesSearch(query);
+    boolean success = true;
+    List<Title> tempTitles = null;
+    try{
+      tempTitles = this.userService.getTitlesSearch(query);
+    } catch (Exception e) {
+      success = false;
+    } finally {
+      if (tempTitles == null) { success = false; }
+    }
+    List<Title> tempAllTitles = null;
+    if (success) {
+      try{
+        tempAllTitles = userService.getTitles();
+      } catch (Exception e) {
+        success = false;
+      } finally {
+        if (tempAllTitles == null) { success = false; }
+      }
+    }
     TitlesReply response = new TitlesReply();
     response.setTitles(tempTitles);
-    response.setAllTitles(userService.getTitles()); 
+    response.setAllTitles(tempAllTitles); 
+    response.setSuccess(success);
     return new ResponseEntity<>(response, HttpStatus.OK);
     
   }

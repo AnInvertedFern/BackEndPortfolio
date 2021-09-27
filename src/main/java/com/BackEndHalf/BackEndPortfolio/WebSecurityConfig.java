@@ -94,9 +94,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
   public JdbcUserDetailsManager getUserDetails() {
     return userDetails;
   }
-  public void setUserDetails(JdbcUserDetailsManager userDetails) {
-    this.userDetails = userDetails;
-  }
+  // public void setUserDetails(JdbcUserDetailsManager userDetails) {
+  //   this.userDetails = userDetails;
+  // }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

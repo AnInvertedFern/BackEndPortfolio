@@ -27,7 +27,7 @@ public class BackEndPortfolioApplication implements CommandLineRunner {
 	DataSource dataSource;
 
 	@Override
-	public void run(String... args) {
+	public void run(String... args) throws Exception {
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update("DROP TABLE IF EXISTS users CASCADE");
@@ -68,7 +68,7 @@ public class BackEndPortfolioApplication implements CommandLineRunner {
       "navy",
       "purple",
       "black",
-      "white",
+      "orange",
       "brown",
       "green",
       "red"
@@ -92,7 +92,7 @@ public class BackEndPortfolioApplication implements CommandLineRunner {
 			'O',
 			"Green",
 			"Black",
-			"White",
+			"Blue",
 			"purple"
 
 		);
@@ -103,6 +103,7 @@ public class BackEndPortfolioApplication implements CommandLineRunner {
 		.roles("USER")
 		.build() );
 		System.out.println("Bob's user ID is : " +  Long.toString( tempUser.getId()) );
+		
 
 		tempUser = new SiteUser(
 			"Jane",
@@ -116,7 +117,7 @@ public class BackEndPortfolioApplication implements CommandLineRunner {
 			'L',
 			"red",
 			"blue",
-			"white",
+			"pink",
 			"purple"
 
 		);
@@ -127,6 +128,31 @@ public class BackEndPortfolioApplication implements CommandLineRunner {
 		.roles("ADMIN")
 		.build() );
 		System.out.println("Jane's user ID is : " +  Long.toString( tempUser.getId()) );
+
+
+		tempUser = new SiteUser(
+			"Fred",
+			"Joe",
+			"Cook",
+			new Long[0],
+			0,
+			"What? A quote!",
+			"Likes broccoli",
+			2,
+			'C',
+			"blue",
+			"orange",
+			"black",
+			"gold"
+
+		);
+		userService.addUser(tempUser);
+		webSecurityConfig.getUserDetails().createUser(User.withDefaultPasswordEncoder()
+		.username( Long.toString( tempUser.getId()) )
+		.password("AmThirdUser")
+		.roles("USER")
+		.build() );
+		System.out.println("Fred's user ID is : " +  Long.toString( tempUser.getId()) );
 
 		System.out.println("Finished Creating User");
 

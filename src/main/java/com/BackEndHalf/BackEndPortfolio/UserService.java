@@ -27,7 +27,7 @@ public class UserService {
       this.themeService = themeService;
   }
   // List<SiteUser> tempUsers;
-  public List<SiteUser> getUsers(Principal userLoggedIn) {
+  public List<SiteUser> getUsers(Principal userLoggedIn) throws Exception {
     // this.tempUsers = userRepository.findAll();
     List<SiteUser> tempUsers = userRepository.findAll();
     tempUsers.sort(new SiteUser() );
@@ -37,6 +37,9 @@ public class UserService {
     return tempUsers;
   }
   private boolean getIsAdmin(Principal userDetails) {
+    
+    // System.out.println( ((UsernamePasswordAuthenticationToken) userDetails).getCredentials());
+    // System.out.println("\n\n\n\n\n\n\n");
     boolean isAdmin = false;
 
     Collection<GrantedAuthority> roles = ((UsernamePasswordAuthenticationToken) userDetails ).getAuthorities();
@@ -69,24 +72,30 @@ public class UserService {
     return users;
   }
   private boolean checkDuplicateContactsAndLogin(SiteUser userAddTo, SiteUser userToAdd, Principal userDetails) {
-    if (userDetails == null) { 
+    if (userDetails == null || userAddTo == null || userToAdd == null) { 
+      System.out.println("here0\n\n\n\n\n\n");
       return false;
     }
     if (!userToAdd.getId().equals(Long.parseLong(userDetails.getName())) ) {
+      System.out.println(userToAdd.getId() + ", " +Long.parseLong(userDetails.getName()));
+      System.out.println("here1\n\n\n\n\n\n");
       return false;
     }
     if (userToAdd.getId().equals(userAddTo.getId()) ) {
+      System.out.println("here2\n\n\n\n\n\n");
       return false;
     }
     if ( new ArrayList<Long>(Arrays.asList(userAddTo.getContacts())) .indexOf(userToAdd.getId()) != -1) {
+      System.out.println("here3\n\n\n\n\n\n");
       return false;
     }
     return true;
 
   }
-  public SiteUser addContact(SiteUser userAddTo, SiteUser userToAdd, Principal userLoggedIn) {
+  public SiteUser addContact(SiteUser userAddTo, SiteUser userToAdd, Principal userLoggedIn) throws Exception {
     if (!checkDuplicateContactsAndLogin(userAddTo, userToAdd, userLoggedIn)) {
-      return null; //make a proper error message later
+      throw new Exception();
+      // return null; //make a proper error message later
     }
     SiteUser oldUserAddTo = userRepository.findById(userAddTo.getId()).orElse(null);
     // System.out.println(oldUserAddTo.getLastName());
@@ -106,12 +115,13 @@ public class UserService {
         return oldUserAddTo;
     } else {
         // userRepository.save(user);
-        return null;
+        throw new Exception();
+      // return null;
     }
     
   }   //call updateUsers
   private boolean checkUpdateUserSelfPermissionAndFields(SiteUser user, Principal userDetails) {
-    if (userDetails == null) { 
+    if (userDetails == null || user == null) { 
       return false;
     }
     System.out.println(user.toString());
@@ -132,7 +142,7 @@ public class UserService {
       System.out.println("here0\n\n\n\n\n\n");
       return false;
     }
-    if ( !user.getLastName().equals(oldUser.getLastName()) ){
+    if ( !user.getLastName().equals(oldUser.getLastName()) && !getIsAdmin(userDetails) ){
       System.out.println("here1\n\n\n\n\n\n");
       return false;
     }
@@ -141,27 +151,38 @@ public class UserService {
       return false;
     }
     if ( user.getContacts().length != oldUser.getContacts().length ){
-      System.out.println("here3\n\n\n\n\n\n");
+      System.out.println(user.getContacts());
+      System.out.println(oldUser.getContacts());
+      System.out.println("here3\n\n\n\n\n\nhgv");
       return false;
     }
+
+    
+    if ( !user.getSecret().equals(oldUser.getSecret()) && !user.getId().equals(Long.parseLong(userDetails.getName()))  ){
+      System.out.println("here4\n\n\n\n\n\n");
+      return false;
+    }
+
     for (int i = 0; i < user.getContacts().length; i++) {
       if (!user.getContacts()[i].equals(oldUser.getContacts()[i]) ) {
         System.out.println(!user.getContacts()[i].equals(oldUser.getContacts()[i]));
         System.out.println(user.getContacts()[i].toString() +", "+i+", "+ oldUser.getContacts()[i].toString());
-        System.out.println("here4\n\n\n\n\n\n");
+        System.out.println("here5\n\n\n\n\n\n");
         return false; // This will trigger is the contacts get out of order (e.g. if contact history gets out of order)
       }
     }
     return true;
   }
-  public SiteUser updateUsers(SiteUser user, Principal userLoggedIn) {
+  public SiteUser updateUsers(SiteUser user, Principal userLoggedIn) throws Exception {
     if (!checkUpdateUserSelfPermissionAndFields(user, userLoggedIn)) {
       System.out.println("failed permissions and fields check in update user");
-      return null; //make a proper error message later
+      throw new Exception();
+      // return null; //make a proper error message later
     }
     if (!checkUserConsistancy(user)) {
       System.out.println("failed consistancy check in update user");
-      return null; //make a proper error message later
+      throw new Exception();
+      // return null; //make a proper error message later
     }
     SiteUser oldUser = userRepository.findById(user.getId()).orElse(null);
     if (oldUser != null) {
@@ -171,12 +192,16 @@ public class UserService {
         return user;
     } else {
         // userRepository.save(user);
-        return null;
+        throw new Exception();
+      // return null;
     }
     
   }
   
   private boolean checkUserConsistancy(SiteUser user) {
+    if (user == null) { 
+      return false;
+    }
     if ( !Pattern.compile("[\\-a-zA-Z_ ]+").matcher(user.getFirstName()).matches() ) {
       System.out.println("here1\n\n\n\n\n\n");
       return false;
@@ -227,13 +252,15 @@ public class UserService {
       
 
   }
-  public SiteUser addUser(SiteUser user) {
+  public SiteUser addUser(SiteUser user) throws Exception {
     if (!checkUserConsistancy(user)) {
       System.out.println("failed consistancy check in add user");
-      return null; //make a proper error message later
+      throw new Exception();
+      // return null; //make a proper error message later
     }
     if (user.getContactNum() != 0) {
-      return null; //make a proper error message later
+      throw new Exception();
+      // return null; //make a proper error message later
     }
     userRepository.save(user);
     System.out.println("added user");
@@ -251,19 +278,23 @@ public class UserService {
     return true;
 
   }
-  public String deleteUser(Long userID, Principal userLoggedIn) {
+  public String deleteUser(Long userID, Principal userLoggedIn) throws Exception {
     if (!checkDeleteUserPermissions(userID, userLoggedIn)) {
-      return null; //make a proper error message later
+      throw new Exception();
+      // return null; //make a proper error message later
     }
     userRepository.deleteById(userID);
     //check credentials and role
     this.webSecurityConfig.getUserDetails().deleteUser(Long.toString(userID));
-    return "Deleted";
+    return Long.toString(userID);
   }
+ public void removeUserOnFail(Long userID) {
+  userRepository.deleteById(userID);
+ }
   // public searchUser() {
     
   // }
-  public List<Title> getTitles() {
+  public List<Title> getTitles() throws Exception{
     List<SiteUser> allUsers= userRepository.findAll();
     List<Title> tempTitles= constructTItles(allUsers);
     tempTitles.sort(new Title() );
@@ -276,7 +307,7 @@ public class UserService {
       int titlesIndex = -1;
       int index = 0;
       for (Title title : titlesSeen) {
-        if (user.getTitle() == title.getTitle()){
+        if ( user.getTitle().equals(title.getTitle()) ){
           titlesIndex = index;
           title.getUsers().add(user);
         }
@@ -294,21 +325,40 @@ public class UserService {
   // public searchTitles() {
     
   // }
-  public SiteUser attemptLogin_GetRole(Principal user) {
+  public SiteUser attemptLogin_GetRole(Principal user) throws Exception {
+    if (user == null) {
+      throw new Exception();
+      // return null;
+    }
     return userRepository.findById( Long.parseLong(user.getName()) ).orElse(null);
   }
   // public SiteUser getUserByID(Long userID) {
   //   return userRepository.findById(userID).orElse(null);
   // }
-  public List<SiteUser> getUsersSearch(String query, Principal userLoggedIn) {
+  private boolean checkGoodQuery(String query) {
+    if ( !Pattern.compile("[-a-zA-Z0-9()_.!,? ]+").matcher(query).matches() ) {
+      return false;
+    }
+    return true;
+  }
+  public List<SiteUser> getUsersSearch(String query, Principal userLoggedIn) throws Exception {
+    if (!checkGoodQuery(query)) {
+      throw new Exception();
+      // return null;
+    }
     List<SiteUser> tempUsers = userRepository.findAllByAll(query);
     tempUsers.sort(new SiteUser() );
     tempUsers = filterInfoByUserAndRole(tempUsers, userLoggedIn);
     return tempUsers;
     
   }
-  public List<Title> getTitlesSearch(String query) {
+  public List<Title> getTitlesSearch(String query) throws Exception {
+    if (!checkGoodQuery(query)) {
+      throw new Exception();
+      // return null;
+    }
     List<SiteUser> searchedUsers= userRepository.findAllByTitle(query);
+    searchedUsers = filterInfoByUserAndRole(searchedUsers, null);
     List<Title> tempTitles= constructTItles(searchedUsers);
     tempTitles.sort(new Title() );
     return tempTitles;
