@@ -4,12 +4,6 @@ Current Tasks
 -----------------------------------------
 
 #========================================
-Task #2: Design Unit and Intergration Tests
-Resolution: Not Started
-SubTasks: Task #3
-#========================================
-
-#========================================
 Task #6: Polish Code
 Resolution: Not Started
 SubTasks: None
@@ -17,6 +11,12 @@ SubTasks: None
 
 Finished Tasks
 -----------------------------------------
+
+#========================================
+Task #2: Design Unit and Intergration Tests
+Resolution: Finished
+SubTasks: Task #3
+#========================================
 
 #========================================
 Task #4: Fill Out the Skeleton
