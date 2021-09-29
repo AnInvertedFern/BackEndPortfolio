@@ -51,12 +51,9 @@ public class ThemeService {
 
     Themes oldTheme = themeRepository.findById(theme.getId()).orElse(null);
     if (oldTheme != null) {
-        // oldUser.setAll(user);
-        // userRepository.save(oldUser);
         themeRepository.save(theme);
         return theme;
     } else {
-        // userRepository.save(user);
         return null;
     }
     

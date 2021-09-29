@@ -1,11 +1,13 @@
 package com.BackEndHalf.BackEndPortfolio;
 
 import org.assertj.core.util.Arrays;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,6 +24,9 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.sql.DataSource;
+
 import com.sun.security.auth.UserPrincipal;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,8 +35,170 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @AutoConfigureMockMvc
 class BackEndPortfolioApplicationTests {
 
+	@BeforeEach
+	void reset(@Autowired UserService userService, @Autowired ThemeService themeService, @Autowired WebSecurityConfig webSecurityConfig, @Autowired DataSource dataSource) throws Exception{
+		
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		jdbcTemplate.update("DROP TABLE IF EXISTS users CASCADE");
+		jdbcTemplate.update("DROP TABLE IF EXISTS authorities");
+		jdbcTemplate.update("CREATE TABLE users ( username varchar(255) NOT NULL, password varchar(255) NOT NULL, enabled boolean NOT NULL, PRIMARY KEY (username) )");
+		jdbcTemplate.update("CREATE TABLE authorities ( username varchar(255) NOT NULL, authority varchar(255) NOT NULL, PRIMARY KEY (username, authority), FOREIGN KEY (username) REFERENCES users (username) ) ");
+
+		jdbcTemplate.update("DROP TABLE IF EXISTS site_user");
+		jdbcTemplate.update("DROP TABLE IF EXISTS themes");
+		jdbcTemplate.update("DROP SEQUENCE IF EXISTS hibernate_sequence");
+		jdbcTemplate.update("CREATE SEQUENCE hibernate_sequence START 1");
+		jdbcTemplate.update("CREATE TABLE site_user ( id bigint NOT NULL, card_color varchar(255) NOT NULL, contact_num int NOT NULL, contacts bytea NOT NULL, first_name varchar(255) NOT NULL, last_name varchar(255) NOT NULL, last_theme int NOT NULL, quote varchar(255) NOT NULL, secret varchar(255) NOT NULL, symbol char(1) NOT NULL, symbol_background_color varchar(255) NOT NULL, symbol_color varchar(255) NOT NULL, text_color varchar(255) NOT NULL, title varchar(255) NOT NULL, PRIMARY KEY (id) ) ");
+		jdbcTemplate.update("CREATE TABLE themes ( id bigint NOT NULL, active_tab_color varchar(255) NOT NULL, add_user_color varchar(255) NOT NULL, background_color varchar(255) NOT NULL, confirm_theme_color varchar(255) NOT NULL, edit_user_color varchar(255) NOT NULL, footer_seperator_color varchar(255) NOT NULL, inactive_tab_color varchar(255) NOT NULL, input_button_color varchar(255) NOT NULL, input_color varchar(255) NOT NULL, login_shadow_color varchar(255) NOT NULL, logout_button_color varchar(255) NOT NULL, popup_color varchar(255) NOT NULL, refresh_user_color varchar(255) NOT NULL, search_bar_color varchar(255) NOT NULL, search_title_shadow_color varchar(255) NOT NULL, text_color varchar(255) NOT NULL, title_shadow_color varchar(255) NOT NULL, toolbar_color varchar(255) NOT NULL , PRIMARY KEY (id) ) ");
+
+		Themes tempTheme = new Themes(
+			"royalblue",
+			"yellow",
+			"tomato",
+			"navy",
+			"violet",
+			"grey",
+			"brown",
+			"gold",
+			"green",
+			"palevioletred",
+
+			"green",
+			"beige",
+			"blueviolet",
+			"black",
+			"orange",
+			"blue",
+			"cornsilk",
+			"pink"
+		);
+		themeService.addTheme(tempTheme);
+		tempTheme = new Themes(
+			"yellow",
+      "blue",
+      "navy",
+      "red",
+      "black",
+      "purple",
+      "lime",
+      "brown",
+      "green",
+      "gold",
+
+			"olivedrab",
+			"beige",
+			"blueviolet",
+			"crimson",
+			"orangered",
+			"white",
+			"lemonchiffon",
+			"peachpuff"
+		);
+		themeService.addTheme(tempTheme);
+		tempTheme = new Themes(
+			"blue",
+      "yellow",
+      "red",
+      "navy",
+      "purple",
+      "black",
+      "orange",
+      "firebrick",
+      "green",
+      "red",
+
+			"indianred",
+			"lavenderblush",
+			"purple",
+			"black",
+			"goldenrod",
+			"gold",
+			"black",
+			"pink"
+		);
+		themeService.addTheme(tempTheme);
+		System.out.println("Finished Creating Themes");
+
+		SiteUser tempUser = new SiteUser(
+			"Bob",
+			"Smith",
+			"Cook",
+			new Long[0],
+			0,
+			"Hi, I am Bob",
+			"This is a secret",
+			2,
+			'O',
+			"Green",
+			"Black",
+			"Blue",
+			"purple"
+
+		);
+		userService.addUser(tempUser);
+		webSecurityConfig.getUserDetails().createUser(User.withDefaultPasswordEncoder()
+		.username( Long.toString( tempUser.getId()) )
+		.password("AmFirstUser")
+		.roles("USER")
+		.build() );
+		System.out.println("Bob's user ID is : " +  Long.toString( tempUser.getId()) );
+		
+
+		tempUser = new SiteUser(
+			"Jane",
+			"Smith",
+			"Bus Driver",
+			new Long[0],
+			0,
+			"Hi, I am Jane",
+			"What secret?",
+			1,
+			'L',
+			"red",
+			"blue",
+			"pink",
+			"purple"
+
+		);
+		userService.addUser(tempUser);
+		webSecurityConfig.getUserDetails().createUser(User.withDefaultPasswordEncoder()
+		.username( Long.toString( tempUser.getId()) )
+		.password("AmSecondUser")
+		.roles("ADMIN")
+		.build() );
+		System.out.println("Jane's user ID is : " +  Long.toString( tempUser.getId()) );
+
+
+		tempUser = new SiteUser(
+			"Fred",
+			"Joe",
+			"Cook",
+			new Long[0],
+			0,
+			"What? A quote!",
+			"Likes broccoli",
+			2,
+			'C',
+			"blue",
+			"orange",
+			"black",
+			"gold"
+
+		);
+		userService.addUser(tempUser);
+		webSecurityConfig.getUserDetails().createUser(User.withDefaultPasswordEncoder()
+		.username( Long.toString( tempUser.getId()) )
+		.password("AmThirdUser")
+		.roles("USER")
+		.build() );
+		System.out.println("Fred's user ID is : " +  Long.toString( tempUser.getId()) );
+
+		System.out.println("Finished Creating User");
+
+	}
+
 	@Test
-	void contextLoads(@Autowired MockMvc mvc) throws Exception{
+	void userControllerGetUserTests(@Autowired MockMvc mvc) throws Exception{
 		assert( mvc.perform(get("/api/users/all")).andReturn().getResponse().getContentAsString().contains("Bob") );
 		ObjectMapper mapper = new ObjectMapper();
 		UserReply userReply = mapper.readValue(mvc.perform(get("/api/users/all")).andReturn().getResponse().getContentAsString(), UserReply.class);
@@ -39,9 +206,7 @@ class BackEndPortfolioApplicationTests {
 		assert(userReply.getAllUsers().size()==3);
 		assert(userReply.getAllUsers().get(0).getId()==4);
 		assert(userReply.getAllUsers().get(0).getSecret().equals("***Secret***"));
-		// mvc.perform(get("/api/users/all")).andExpect(status().isOk()).andExpect(content().string("Hello World"));
 
-		// mapper = new ObjectMapper();
 		HttpHeaders headersAdmin = new HttpHeaders();
 		headersAdmin.setBasicAuth("5", "AmSecondUser");
 		UserReply userReplyAdmin = mapper.readValue(mvc.perform(get("/api/users/all").headers(headersAdmin)).andReturn().getResponse().getContentAsString(), UserReply.class);
@@ -50,7 +215,6 @@ class BackEndPortfolioApplicationTests {
 		assert(userReplyAdmin.getAllUsers().get(0).getId()==4);
 		assert(!userReplyAdmin.getAllUsers().get(0).getSecret().equals("***Secret***"));
 
-		// mapper = new ObjectMapper();
 		HttpHeaders headersBob = new HttpHeaders();
 		headersBob.setBasicAuth("4", "AmFirstUser");
 		UserReply userReplyBob = mapper.readValue(mvc.perform(get("/api/users/all").headers(headersBob)).andReturn().getResponse().getContentAsString(), UserReply.class);
@@ -63,18 +227,13 @@ class BackEndPortfolioApplicationTests {
 	}
 
 	@Test
-	void contextLoads2(@Autowired UserService userService) throws Exception {
+	void userServiceGetUserTests(@Autowired UserService userService) throws Exception {
 		List<SiteUser> noLoginGetAllUsers = userService.getUsers(null);
 		assert( noLoginGetAllUsers != null);
 		assert(noLoginGetAllUsers.size()==3);
 		assert(noLoginGetAllUsers.get(0).getId()==4);
 		assert(noLoginGetAllUsers.get(0).getSecret().equals("***Secret***"));
-		// UserDetails adminLogin = User.withDefaultPasswordEncoder()
-		// 		.username("-1")
-		// 		.password("password")
-		// 		.roles("ADMIN")
-		// 		.build();
-		// List<SiteUser> adminGetAllUsers = userService.getUsers((Principal) adminLogin);
+
 		ArrayList<GrantedAuthority> tempAuthArray = new ArrayList<GrantedAuthority>();
 		tempAuthArray.add( new SimpleGrantedAuthority("ROLE_ADMIN") );
 		UsernamePasswordAuthenticationToken adminLogin = new UsernamePasswordAuthenticationToken((Object) new UserPrincipal("5"), (Object) null, tempAuthArray );
@@ -388,7 +547,6 @@ class BackEndPortfolioApplicationTests {
 		RESTRequest addUserRequest = new RESTRequest("AmFourthUser", tempUser, null);
 
 		String addBody = mapper.writeValueAsString(addUserRequest);
-		System.out.println(addBody);
 		UserReply addUserReply = mapper.readValue(mvc.perform(put("/api/users/").contentType("application/json").content(addBody)).andReturn().getResponse().getContentAsString(), UserReply.class);
 		assert(addUserReply.isSuccess());
 		assert(addUserReply.getUsers().size() == 1);
@@ -431,7 +589,6 @@ class BackEndPortfolioApplicationTests {
 		addBody = mapper.writeValueAsString(addUserRequest);
 		UserReply addUserReplyBadContact = mapper.readValue(mvc.perform(put("/api/users/").contentType("application/json").content(addBody)).andReturn().getResponse().getContentAsString(), UserReply.class);
 		assert(!addUserReplyBadContact.isSuccess());
-		// System.out.println(addUserReplyBadContact.getUsers());
 
 		tempUser = new SiteUser(
 			"Jessie1",
@@ -460,7 +617,6 @@ class BackEndPortfolioApplicationTests {
 		
 		HttpHeaders headersJessieFail = new HttpHeaders();
 		headersJessieFail.setBasicAuth("8", "AmFifthUser");
-		// System.out.println(mvc.perform(get("/api/users/all").headers(headersJessieFail)).andReturn().getResponse().getContentAsString()+"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 		assert(mvc.perform(get("/api/users/all").headers(headersJessieFail)).andReturn().getResponse().getStatus() == 401);
 
 	}
@@ -592,7 +748,6 @@ class BackEndPortfolioApplicationTests {
 		UserReply RobertUserReply = mapper.readValue(mvc.perform(post("/api/users/").headers(headersRobert).contentType("application/json").content(updateBody)).andReturn().getResponse().getContentAsString(), UserReply.class);
 		assert(RobertUserReply.isSuccess());
 		assert(RobertUserReply.getUsers().size()==1);
-		System.out.println(RobertUserReply.getUsers());
 		assert(RobertUserReply.getUsers().get(0).getId()==4);
 		assert(RobertUserReply.getUsers().get(0).getFirstName().equals("Robert"));
 
@@ -600,7 +755,6 @@ class BackEndPortfolioApplicationTests {
 		assert(allUserReply.isSuccess());
 		assert(allUserReply.getAllUsers().size()==3);
 		assert(allUserReply.getAllUsers().get(0).getId()==4);
-		System.out.println(allUserReply.getAllUsers());
 		assert(allUserReply.getAllUsers().get(0).getFirstName().equals("Robert"));
 		assert(allUserReply.getAllUsers().get(0).getQuote().equals("A quote no more"));
 		assert(allUserReply.getAllUsers().get(0).getSecret().equals("***Secret***"));
@@ -655,24 +809,19 @@ class BackEndPortfolioApplicationTests {
 		assert(allUsers.get(1).getFirstName().equals("Jane"));
 
 		SiteUser tempJane = allUsers.get(1); 
-		System.out.println(tempJane);
 
 		tempJane.setFirstName("Rebecca");
-		// janeAuthArray = new ArrayList<GrantedAuthority>();
-		// janeAuthArray.add( new SimpleGrantedAuthority("ROLE_ADMIN") );
-		// janeLogin = new UsernamePasswordAuthenticationToken((Object) new UserPrincipal("5"), (Object) null, janeAuthArray ); 
-		System.out.println(tempJane);
 		SiteUser updatedUserJane = userService.updateUsers(tempJane, janeLogin);
 		assert(updatedUserJane.getId() == 5);
 		assert(updatedUserJane.getFirstName().equals("Rebecca"));
 		
-		// janeAuthArray = new ArrayList<GrantedAuthority>();
-		// janeAuthArray.add( new SimpleGrantedAuthority("ROLE_ADMIN") );
-		// janeLogin = new UsernamePasswordAuthenticationToken((Object) new UserPrincipal("5"), (Object) null, janeAuthArray ); 
 		allUsers = userService.getUsers(janeLogin);
 		assert(allUsers.size()==3);
 		assert(allUsers.get(1).getId()==5);
 		assert(allUsers.get(1).getFirstName().equals("Rebecca"));
+
+		//ReflectionTestUtils can't change the id field
+		//So this part of the test cannot be run
 
 		// ReflectionTestUtils.setField(tempJane, "id", 9, Long.class);
 		// assert(tempJane.getId() == 9);
@@ -739,7 +888,6 @@ class BackEndPortfolioApplicationTests {
 		String addContactBody = mapper.writeValueAsString(addUserRequest);
 		UserReply addContactsReply = mapper.readValue(mvc.perform(post("/api/users/addcontact/").contentType("application/json").content(addContactBody).headers(headersFred)).andReturn().getResponse().getContentAsString(), UserReply.class);
 		assert(addContactsReply.isSuccess());
-		System.out.println(addContactsReply.getUsers());
 		assert(addContactsReply.getUsers().size()==1);
 		assert(addContactsReply.getUsers().get(0).getId()==4);
 
@@ -828,12 +976,12 @@ class BackEndPortfolioApplicationTests {
 	@Test
 	void userControllerDeleteUserTests(@Autowired MockMvc mvc) throws Exception{
 		
-
 		ObjectMapper mapper = new ObjectMapper();
 
-		UserReply deleteUserReplyFailNoLogin = mapper.readValue(mvc.perform(delete("/api/users/4")).andReturn().getResponse().getContentAsString(), UserReply.class);
-		assert(!deleteUserReplyFailNoLogin.isSuccess());
-
+		assert(mvc.perform(delete("/api/users/4")).andReturn().getResponse().getStatus() == 401);
+		// UserReply deleteUserReplyFailNoLogin = mapper.readValue(mvc.perform(delete("/api/users/4")).andReturn().getResponse().getContentAsString(), UserReply.class);
+		// assert(!deleteUserReplyFailNoLogin.isSuccess());
+		//Set up for this test is dependent on how spring is set up to process login information
 		
 		HttpHeaders headersFred = new HttpHeaders();
 		headersFred.setBasicAuth("6", "AmThirdUser");
@@ -844,7 +992,6 @@ class BackEndPortfolioApplicationTests {
 		HttpHeaders headersBob = new HttpHeaders();
 		headersBob.setBasicAuth("4", "AmFirstUser");
 
-		
 		assert(mvc.perform(get("/api/users/all").headers(headersBob)).andReturn().getResponse().getStatus() == 200);
 		assert(mvc.perform(get("/api/users/all").headers(headersFred)).andReturn().getResponse().getStatus() == 200);
 
@@ -865,13 +1012,10 @@ class BackEndPortfolioApplicationTests {
 		assert(allUserReply.isSuccess());
 		assert(allUserReply.getAllUsers().size()==1);
 		assert(allUserReply.getAllUsers().get(0).getId()==5);
-
-
 		
 		assert(mvc.perform(get("/api/users/all").headers(headersBob)).andReturn().getResponse().getStatus() == 401);
 		assert(mvc.perform(get("/api/users/all").headers(headersFred)).andReturn().getResponse().getStatus() == 401);
 
-		
 		UserReply deleteUserReplyJane = mapper.readValue(mvc.perform(delete("/api/users/5").headers(headersJane)).andReturn().getResponse().getContentAsString(), UserReply.class);
 		assert(deleteUserReplyJane.isSuccess());
 
@@ -879,7 +1023,6 @@ class BackEndPortfolioApplicationTests {
 		assert(allUserReply.isSuccess());
 		assert(allUserReply.getAllUsers().size()==0);
 		assert(mvc.perform(get("/api/users/all").headers(headersJane)).andReturn().getResponse().getStatus() == 401);
-
 
 	}
 
@@ -908,7 +1051,6 @@ class BackEndPortfolioApplicationTests {
 		}
 		assert(errored);
 
-
 		ArrayList<GrantedAuthority> bobAuthArray = new ArrayList<GrantedAuthority>();
 		bobAuthArray.add( new SimpleGrantedAuthority("ROLE_USER") );
 		UsernamePasswordAuthenticationToken bobLogin = new UsernamePasswordAuthenticationToken((Object) new UserPrincipal("4"), (Object) null, bobAuthArray ); 
@@ -916,7 +1058,6 @@ class BackEndPortfolioApplicationTests {
 		assert(deletedUserIdBob.equals("4"));
 		assert(userService.getUsers(null).size() == 2);
 		assert(userService.getUsers(null).get(0).getId() == 5);
-
 		
 		ArrayList<GrantedAuthority> janeAuthArray = new ArrayList<GrantedAuthority>();
 		janeAuthArray.add( new SimpleGrantedAuthority("ROLE_ADMIN") );
@@ -936,13 +1077,11 @@ class BackEndPortfolioApplicationTests {
 	@Test
 	void userControllerAttemptLoginTests(@Autowired MockMvc mvc) throws Exception{
 		
-
 		ObjectMapper mapper = new ObjectMapper();
 
 		GetRoleReply attemptLoginReplyFailNoLogin = mapper.readValue(mvc.perform(get("/login/get_role/")).andReturn().getResponse().getContentAsString(), GetRoleReply.class);
 		assert(!attemptLoginReplyFailNoLogin.isSuccess());
 
-		
 		HttpHeaders headersFred = new HttpHeaders();
 		headersFred.setBasicAuth("6", "AmThirdUser");
 
@@ -951,7 +1090,6 @@ class BackEndPortfolioApplicationTests {
 		assert(!attemptLoginReplyFred.isAdmin());
 		assert(attemptLoginReplyFred.getCurrentUser().getFirstName().equals("Fred"));
 
-		
 		HttpHeaders headersJane = new HttpHeaders();
 		headersJane.setBasicAuth("5", "AmSecondUser");
 
@@ -959,14 +1097,11 @@ class BackEndPortfolioApplicationTests {
 		assert(attemptLoginReplyJane.isSuccess());
 		assert(attemptLoginReplyJane.isAdmin());
 		assert(attemptLoginReplyJane.getCurrentUser().getFirstName().equals("Jane"));
-
-
 	}
 
 	
 	@Test
 	void userServiceAttemptLoginTests(@Autowired UserService userService) throws Exception{
-		
 		
 		boolean errored = false;
 		SiteUser currentUser;
@@ -976,14 +1111,12 @@ class BackEndPortfolioApplicationTests {
 			errored = true;
 		}
 		assert(errored);
-
 		
 		ArrayList<GrantedAuthority> bobAuthArray = new ArrayList<GrantedAuthority>();
 		bobAuthArray.add( new SimpleGrantedAuthority("ROLE_USER") );
 		UsernamePasswordAuthenticationToken bobLogin = new UsernamePasswordAuthenticationToken((Object) new UserPrincipal("4"), (Object) null, bobAuthArray ); 
 		currentUser = userService.attemptLogin_GetRole(bobLogin);
 		assert(currentUser.getFirstName().equals("Bob"));
-
 	}
 
 	
@@ -1022,13 +1155,11 @@ class BackEndPortfolioApplicationTests {
 		tempUser.setContactNum(0);
 		assert((boolean) ReflectionTestUtils.invokeMethod(userService, "checkUserConsistancy", tempUser));
 
-
 	}
 
 	@Test
 	void themesControllerAllTests(@Autowired MockMvc mvc, @Autowired ThemeService themeService) throws Exception{
 		
-
 		ObjectMapper mapper = new ObjectMapper();
 
 		Themes[] gotAllThemes = mapper.readValue(mvc.perform(get("/api/themes/all/")).andReturn().getResponse().getContentAsString(), Themes[].class);
@@ -1047,7 +1178,16 @@ class BackEndPortfolioApplicationTests {
 			"blue",
 			"green",
 			"black",
-			"indigo"
+			"indigo",
+
+			"brown",
+			"gold",
+			"purple",
+			"beige",
+			"silver",
+			"teal",
+			"aqua",
+			"olive"
 		);
 		themeService.addTheme(tempTheme);
 		gotAllThemes = mapper.readValue(mvc.perform(get("/api/themes/all/")).andReturn().getResponse().getContentAsString(), Themes[].class);
@@ -1063,14 +1203,10 @@ class BackEndPortfolioApplicationTests {
 		HttpHeaders headersFred = new HttpHeaders();
 		headersFred.setBasicAuth("6", "AmThirdUser");
 
-		// Themes updateThemeFred = mapper.readValue(mvc.perform(post("/api/themes/").headers(headersFred).contentType("application/json").content(updateThemes)).andReturn().getResponse()..getContentAsString(), Themes.class);
 		String updateThemeFred = mvc.perform(post("/api/themes/").headers(headersFred).contentType("application/json").content(updateThemes)).andReturn().getResponse().getContentAsString();
 		// assert(updateThemeFred == null);
-		System.out.println(updateThemeFred+"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 		assert(updateThemeFred.equals(""));
 
-		
-		// String updateThemes = mapper.writeValueAsString(tempTheme);
 		HttpHeaders headersJane = new HttpHeaders();
 		headersJane.setBasicAuth("5", "AmSecondUser");
 
@@ -1093,15 +1229,4 @@ class BackEndPortfolioApplicationTests {
 	}
 
 
-
-
-
-// 	@Test
-// 	void contextLoads2() {
-// 		UserService userService = new UserService(new UserRepository(){
-			
-// 		}, null, null)
-// 		assert(userService.getUsers(null) != null);
-// 	}
-	
 }

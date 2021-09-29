@@ -35,8 +35,6 @@ public class UserController {
   @GetMapping("/api/users/all")
   public ResponseEntity<UserReply> getUsers(Principal userLoggedIn)  {
     System.out.println("Received A getUsers Request");
-    // if (userLoggedIn != null) {System.out.println(userLoggedIn.toString());}
-    // else {System.out.println("userLoggedIn was null");}
 
     boolean success = true;
     List<SiteUser> tempUsers = null;
@@ -48,7 +46,6 @@ public class UserController {
       if (tempUsers == null) { success = false; }
     }
     
-    // for (SiteUser tempUser : tempUsers) {System.out.println( tempUser.toString() ); }
     UserReply response = new UserReply();
     
     response.setAllUsers(tempUsers);
@@ -60,7 +57,6 @@ public class UserController {
   @PostMapping("/api/users/addcontact/")
   public ResponseEntity<UserReply> addContact (@RequestBody RESTRequest request, Principal userLoggedIn) {
     System.out.println("Received A addContact Request");
-    // System.out.println(request.getPrimaryUser().getId() + ", " + request.getSecondaryUser().getId());
     boolean success = true;
     SiteUser tempUsers = null;
     try{
@@ -78,6 +74,7 @@ public class UserController {
   }
   @PostMapping("/api/users/")
   public ResponseEntity<UserReply>  updateUser (@RequestBody SiteUser user, Principal userLoggedIn) {
+    System.out.println("Received A updateUser Request");
     boolean success = true;
     SiteUser tempUsers = null;
     try{
@@ -88,7 +85,6 @@ public class UserController {
       if (tempUsers == null) { success = false; }
     }
 
-
     UserReply response = new UserReply();
     response.setUsers( Arrays.asList(tempUsers) );
     response.setSuccess(success);
@@ -97,6 +93,7 @@ public class UserController {
   }
   @PutMapping("/api/users/")
   public ResponseEntity<UserReply> addUser (@RequestBody RESTRequest request) throws Exception {
+    System.out.println("Received A addUser Request");
     boolean success = true;
     SiteUser tempUsers = null;
     try{
@@ -135,6 +132,7 @@ public class UserController {
   }
   @DeleteMapping("/api/users/{id}")
   public ResponseEntity<UserReply> deleteUser (@PathVariable(value="id") Long userID, Principal userLoggedIn) {
+    System.out.println("Received A deleteUser Request");
     boolean success = true;
     String stringResponse = null;
     try{
@@ -150,13 +148,9 @@ public class UserController {
     return new ResponseEntity<>(response, HttpStatus.OK);
     
   }
-
-  // @PostMapping("/api/users/search/")
-  // public searchUser()  {
-    
-  // }
   @GetMapping("/api/titles/all/")
   public ResponseEntity<TitlesReply> getTitles()  {
+    System.out.println("Received A getTitles Request");
     boolean success = true;
     List<Title> tempTitles = null;
     try{
@@ -166,23 +160,15 @@ public class UserController {
     } finally {
       if (tempTitles == null) { success = false; }
     }
-    for (Title tempTitle : tempTitles) {System.out.println( tempTitle.toString() ); }
     TitlesReply response = new TitlesReply();
     response.setAllTitles(tempTitles);
     response.setSuccess(success);
     return new ResponseEntity<>(response, HttpStatus.OK);
     
   }
-  // @PostMapping("/api/titles/search/")
-  // public searchTitles () {
-    
-  // }
-
   @GetMapping("/login/get_role/")
   public ResponseEntity<GetRoleReply> attemptLogin_GetRole ( Principal userLoggedIn ) {
-    if (userLoggedIn != null) {
-      for (int i =0; i<10;i++){System.out.println("userLoggedIn: " + userLoggedIn.toString());}
-    }
+    System.out.println("Received A attemptLogin_GetRole Request");
     boolean success = true;
     SiteUser tempUsers = null;
     try{
@@ -215,16 +201,9 @@ public class UserController {
     System.out.println("Received A attemptLogout2 Request");
     return new ResponseEntity<>("[\"Done\"]", HttpStatus.OK);
   }
-
-  
-  // @GetMapping("/api/users/{ID}/")
-  // public ResponseEntity<SiteUser> getUserByID (@PathVariable Long userID) {
-  //   SiteUser tempUsers = userService.getUserByID(userID);
-  //   return new ResponseEntity<>(tempUsers, HttpStatus.OK);
-  // }
   @PostMapping("/api/users/search/")
   public ResponseEntity<UserReply> getUsersSearch (@RequestParam(value="searchValue") String query, Principal userLoggedIn) {
-    for (int i =0; i<10;i++){System.out.println(query);}
+    System.out.println("Received A getUsersSearch Request");
     boolean success = true;
     List<SiteUser> tempUsers = null;
     try{
@@ -237,13 +216,12 @@ public class UserController {
     UserReply response = new UserReply();
     response.setUsers(tempUsers);
     response.setSuccess(success);
-    // response.setAllUsers(userService.getUsers()); 
     return new ResponseEntity<>(response, HttpStatus.OK);
     
   }
   @PostMapping("/api/titles/search/")
   public ResponseEntity<TitlesReply> getTitlesSearch (@RequestParam(value="searchValue")  String query) {
-    for (int i =0; i<10;i++){System.out.println(query);}
+    System.out.println("Received A getTitlesSearch Request");
     boolean success = true;
     List<Title> tempTitles = null;
     try{

@@ -28,40 +28,32 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
-  // private InMemoryUserDetailsManager userDetails;
   private JdbcUserDetailsManager userDetails;
 
   @Autowired
   private final DataSource datasource;
   public WebSecurityConfig (DataSource datasource) {
     this.datasource = datasource;
-    
   }
 
   @Override
 	protected void configure(HttpSecurity http) throws Exception {
-    //withHttpOnlyFalse();
-
 
 		http.cors().and()
 			.authorizeRequests()
       .antMatchers(HttpMethod.GET, "/api/users/all").permitAll()
-      .antMatchers(HttpMethod.POST, "/api/users/addcontact/").permitAll()//.authenticated()
-      .antMatchers(HttpMethod.DELETE, "/api/users/{id}").permitAll()//.authenticated()//check user or if admin in controller
-      .antMatchers(HttpMethod.GET, "/api/users/{ID}/").permitAll()   //delete
+      .antMatchers(HttpMethod.POST, "/api/users/addcontact/").authenticated()//.permitAll()//
+      .antMatchers(HttpMethod.DELETE, "/api/users/{id}").authenticated()//.permitAll()//
       .antMatchers(HttpMethod.POST, "/api/users/search/").permitAll()
-      .antMatchers(HttpMethod.POST, "/api/users/search/").permitAll()
-      .antMatchers(HttpMethod.POST, "/api/users/").permitAll()//.authenticated() //check user in controller
-      //.authenticated still lets people update users without being logged in for some reason
+      .antMatchers(HttpMethod.POST, "/api/users/").authenticated()//.permitAll()//
       .antMatchers(HttpMethod.PUT, "/api/users/").permitAll()
       .antMatchers(HttpMethod.GET, "/api/titles/all/").permitAll()
       .antMatchers(HttpMethod.POST, "/api/titles/search/").permitAll()
-      .antMatchers(HttpMethod.POST, "/api/titles/search/").permitAll()
       .antMatchers(HttpMethod.GET, "/api/themes/all/").permitAll()
-      .antMatchers(HttpMethod.POST, "/api/themes/").permitAll()//.hasAnyRole("ADMIN")
+      .antMatchers(HttpMethod.POST, "/api/themes/").hasAnyRole("ADMIN")//.permitAll()//
       .antMatchers(HttpMethod.GET, "/login/get_role/").permitAll()
-      .antMatchers(HttpMethod.GET, "/logout/").permitAll()
-      .antMatchers(HttpMethod.GET, "/logout/give_response/").permitAll()
+      .antMatchers(HttpMethod.GET, "/logout/").authenticated()//.permitAll()//
+      .antMatchers(HttpMethod.GET, "/logout/give_response/").authenticated()//.permitAll()//
 				.and()
 			.formLogin()
 				// .loginPage("/login")
@@ -80,23 +72,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	@Bean
 	@Override
 	public UserDetailsService userDetailsService() {
-		// UserDetails user =
-		// 	 User.withDefaultPasswordEncoder()
-		// 		.username("1")
-		// 		.password("password")
-		// 		.roles("ADMIN")
-		// 		.build();
-
-    // userDetails = new InMemoryUserDetailsManager();
     userDetails = new JdbcUserDetailsManager(this.datasource);
 		return userDetails;
 	}
   public JdbcUserDetailsManager getUserDetails() {
     return userDetails;
   }
-  // public void setUserDetails(JdbcUserDetailsManager userDetails) {
-  //   this.userDetails = userDetails;
-  // }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

@@ -23,12 +23,14 @@ public class ThemeController {
 
   @GetMapping("/api/themes/all/")
   public ResponseEntity<List<Themes>> getThemes()  {
+    System.out.println("Received A getThemes Request");
     List<Themes> tempUsers = this.themeService.getThemes();
     return new ResponseEntity<>(tempUsers, HttpStatus.OK);
     
   }
   @PostMapping("/api/themes/")
   public ResponseEntity<Themes> updateThemes (@RequestBody Themes theme, Principal userLoggedIn) {
+    System.out.println("Received A updateThemes Request");
     Themes tempThemes = themeService.updateThemes(theme, userLoggedIn);
     return new ResponseEntity<>(tempThemes, HttpStatus.OK);
     

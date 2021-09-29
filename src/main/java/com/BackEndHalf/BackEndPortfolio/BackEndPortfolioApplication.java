@@ -35,17 +35,33 @@ public class BackEndPortfolioApplication implements CommandLineRunner {
 		jdbcTemplate.update("CREATE TABLE users ( username varchar(255) NOT NULL, password varchar(255) NOT NULL, enabled boolean NOT NULL, PRIMARY KEY (username) )");
 		jdbcTemplate.update("CREATE TABLE authorities ( username varchar(255) NOT NULL, authority varchar(255) NOT NULL, PRIMARY KEY (username, authority), FOREIGN KEY (username) REFERENCES users (username) ) ");
 
+		jdbcTemplate.update("DROP TABLE IF EXISTS site_user");
+		jdbcTemplate.update("DROP TABLE IF EXISTS themes");
+		jdbcTemplate.update("DROP SEQUENCE IF EXISTS hibernate_sequence");
+		jdbcTemplate.update("CREATE SEQUENCE hibernate_sequence START 1");
+		jdbcTemplate.update("CREATE TABLE site_user ( id bigint NOT NULL, card_color varchar(255) NOT NULL, contact_num int NOT NULL, contacts bytea NOT NULL, first_name varchar(255) NOT NULL, last_name varchar(255) NOT NULL, last_theme int NOT NULL, quote varchar(255) NOT NULL, secret varchar(255) NOT NULL, symbol char(1) NOT NULL, symbol_background_color varchar(255) NOT NULL, symbol_color varchar(255) NOT NULL, text_color varchar(255) NOT NULL, title varchar(255) NOT NULL, PRIMARY KEY (id) ) ");
+		jdbcTemplate.update("CREATE TABLE themes ( id bigint NOT NULL, active_tab_color varchar(255) NOT NULL, add_user_color varchar(255) NOT NULL, background_color varchar(255) NOT NULL, confirm_theme_color varchar(255) NOT NULL, edit_user_color varchar(255) NOT NULL, footer_seperator_color varchar(255) NOT NULL, inactive_tab_color varchar(255) NOT NULL, input_button_color varchar(255) NOT NULL, input_color varchar(255) NOT NULL, login_shadow_color varchar(255) NOT NULL, logout_button_color varchar(255) NOT NULL, popup_color varchar(255) NOT NULL, refresh_user_color varchar(255) NOT NULL, search_bar_color varchar(255) NOT NULL, search_title_shadow_color varchar(255) NOT NULL, text_color varchar(255) NOT NULL, title_shadow_color varchar(255) NOT NULL, toolbar_color varchar(255) NOT NULL , PRIMARY KEY (id) ) ");
+
 		Themes tempTheme = new Themes(
-			"blue",
+			"royalblue",
 			"yellow",
-			"red",
+			"tomato",
 			"navy",
-			"purple",
+			"violet",
 			"grey",
 			"brown",
 			"gold",
 			"green",
-			"red"
+			"palevioletred",
+
+			"green",
+			"beige",
+			"blueviolet",
+			"black",
+			"orange",
+			"blue",
+			"cornsilk",
+			"pink"
 		);
 		themeService.addTheme(tempTheme);
 		tempTheme = new Themes(
@@ -58,7 +74,16 @@ public class BackEndPortfolioApplication implements CommandLineRunner {
       "lime",
       "brown",
       "green",
-      "red"
+      "gold",
+
+			"olivedrab",
+			"beige",
+			"blueviolet",
+			"crimson",
+			"orangered",
+			"white",
+			"lemonchiffon",
+			"peachpuff"
 		);
 		themeService.addTheme(tempTheme);
 		tempTheme = new Themes(
@@ -69,16 +94,21 @@ public class BackEndPortfolioApplication implements CommandLineRunner {
       "purple",
       "black",
       "orange",
-      "brown",
+      "firebrick",
       "green",
-      "red"
+      "red",
+
+			"indianred",
+			"lavenderblush",
+			"purple",
+			"black",
+			"goldenrod",
+			"gold",
+			"black",
+			"pink"
 		);
 		themeService.addTheme(tempTheme);
 		System.out.println("Finished Creating Themes");
-
-		System.out.println("Retriving Themes");
-		System.out.println(themeService.getThemes().toString());
-
 
 		SiteUser tempUser = new SiteUser(
 			"Bob",
@@ -155,9 +185,6 @@ public class BackEndPortfolioApplication implements CommandLineRunner {
 		System.out.println("Fred's user ID is : " +  Long.toString( tempUser.getId()) );
 
 		System.out.println("Finished Creating User");
-
-		System.out.println("Retriving User");
-		// System.out.println(userService.getUsers().toString());
 
 	}
 
