@@ -33,7 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class BackEndPortfolioApplicationTests {
+class BackEndPortfolioTests {
 
 	@BeforeEach
 	void reset(@Autowired UserService userService, @Autowired ThemeService themeService, @Autowired WebSecurityConfig webSecurityConfig, @Autowired DataSource dataSource) throws Exception{
@@ -49,7 +49,7 @@ class BackEndPortfolioApplicationTests {
 		jdbcTemplate.update("DROP SEQUENCE IF EXISTS hibernate_sequence");
 		jdbcTemplate.update("CREATE SEQUENCE hibernate_sequence START 1");
 		jdbcTemplate.update("CREATE TABLE site_user ( id bigint NOT NULL, card_color varchar(255) NOT NULL, contact_num int NOT NULL, contacts bytea NOT NULL, first_name varchar(255) NOT NULL, last_name varchar(255) NOT NULL, last_theme int NOT NULL, quote varchar(255) NOT NULL, secret varchar(255) NOT NULL, symbol char(1) NOT NULL, symbol_background_color varchar(255) NOT NULL, symbol_color varchar(255) NOT NULL, text_color varchar(255) NOT NULL, title varchar(255) NOT NULL, PRIMARY KEY (id) ) ");
-		jdbcTemplate.update("CREATE TABLE themes ( id bigint NOT NULL, active_tab_color varchar(255) NOT NULL, add_user_color varchar(255) NOT NULL, background_color varchar(255) NOT NULL, confirm_theme_color varchar(255) NOT NULL, edit_user_color varchar(255) NOT NULL, footer_seperator_color varchar(255) NOT NULL, inactive_tab_color varchar(255) NOT NULL, input_button_color varchar(255) NOT NULL, input_color varchar(255) NOT NULL, login_shadow_color varchar(255) NOT NULL, logout_button_color varchar(255) NOT NULL, popup_color varchar(255) NOT NULL, refresh_user_color varchar(255) NOT NULL, search_bar_color varchar(255) NOT NULL, search_title_shadow_color varchar(255) NOT NULL, text_color varchar(255) NOT NULL, title_shadow_color varchar(255) NOT NULL, toolbar_color varchar(255) NOT NULL , PRIMARY KEY (id) ) ");
+		jdbcTemplate.update("CREATE TABLE themes ( id bigint NOT NULL, active_tab_color varchar(255) NOT NULL, add_user_color varchar(255) NOT NULL, background_color varchar(255) NOT NULL, confirm_theme_color varchar(255) NOT NULL, edit_user_color varchar(255) NOT NULL, footer_seperator_color varchar(255) NOT NULL, inactive_tab_color varchar(255) NOT NULL, input_button_color varchar(255) NOT NULL, input_color varchar(255) NOT NULL, login_shadow_color varchar(255) NOT NULL, login_button_color varchar(255) NOT NULL, popup_color varchar(255) NOT NULL, refresh_user_color varchar(255) NOT NULL, search_bar_color varchar(255) NOT NULL, search_title_shadow_color varchar(255) NOT NULL, text_color varchar(255) NOT NULL, title_shadow_color varchar(255) NOT NULL, toolbar_color varchar(255) NOT NULL , PRIMARY KEY (id) ) ");
 
 		Themes tempTheme = new Themes(
 			"royalblue",
@@ -133,7 +133,6 @@ class BackEndPortfolioApplicationTests {
 			"Black",
 			"Blue",
 			"purple"
-
 		);
 		userService.addUser(tempUser);
 		webSecurityConfig.getUserDetails().createUser(User.withDefaultPasswordEncoder()
@@ -158,7 +157,6 @@ class BackEndPortfolioApplicationTests {
 			"blue",
 			"pink",
 			"purple"
-
 		);
 		userService.addUser(tempUser);
 		webSecurityConfig.getUserDetails().createUser(User.withDefaultPasswordEncoder()
@@ -183,7 +181,6 @@ class BackEndPortfolioApplicationTests {
 			"orange",
 			"black",
 			"gold"
-
 		);
 		userService.addUser(tempUser);
 		webSecurityConfig.getUserDetails().createUser(User.withDefaultPasswordEncoder()
@@ -194,7 +191,6 @@ class BackEndPortfolioApplicationTests {
 		System.out.println("Fred's user ID is : " +  Long.toString( tempUser.getId()) );
 
 		System.out.println("Finished Creating User");
-
 	}
 
 	@Test
@@ -259,8 +255,6 @@ class BackEndPortfolioApplicationTests {
 		assert(janeGetAllUsers.get(0).getId()==4);
 		assert(janeGetAllUsers.get(0).getFirstName().equals("Bob") );
 		assert(janeGetAllUsers.get(0).getSecret().equals("***Secret***"));
-
-
 	}
 
 	@Test
@@ -319,8 +313,6 @@ class BackEndPortfolioApplicationTests {
 		UserReply userSearchReplyError = mapper.readValue(mvc.perform(post("/api/users/search/").param("searchValue", "<")).andReturn().getResponse().getContentAsString(), UserReply.class);
 		assert(!userSearchReplyError.isSuccess());
 		assert(userSearchReplyError.getUsers() == null);
-
-
 	}
 
 	@Test
@@ -343,7 +335,6 @@ class BackEndPortfolioApplicationTests {
 			errored = true;
 		}
 		assert(errored);
-
 		
 		ArrayList<GrantedAuthority> tempAuthArray = new ArrayList<GrantedAuthority>();
 		tempAuthArray.add( new SimpleGrantedAuthority("ROLE_ADMIN") );
@@ -374,7 +365,6 @@ class BackEndPortfolioApplicationTests {
 		assert(searchUsersCook.get(1).getId()==6);
 		assert(searchUsersCook.get(1).getFirstName().equals("Fred"));
 		assert(searchUsersCook.get(1).getSecret().equals("***Secret***"));
-
 	}
 
 	@Test
@@ -393,12 +383,10 @@ class BackEndPortfolioApplicationTests {
 		} else {
 			titlesReplyCook = titlesReply.getAllTitles().get(1);
 			titlesReplyBus = titlesReply.getAllTitles().get(0);
-
 		}
 		assert( titlesReplyBus.getUsers().get(0).getFirstName().equals("Jane") );
 		assert( titlesReplyCook.getUsers().get(0).getFirstName().equals("Fred") || titlesReplyCook.getUsers().get(1).getFirstName().equals("Fred") );
 		assert( titlesReplyCook.getUsers().get(0).getFirstName().equals("Bob") || titlesReplyCook.getUsers().get(1).getFirstName().equals("Bob") );
-
 	}
 	
 	@Test
@@ -416,12 +404,10 @@ class BackEndPortfolioApplicationTests {
 		} else {
 			titlesReplyCook = gotTitles.get(1);
 			titlesReplyBus = gotTitles.get(0);
-
 		}
 		assert( titlesReplyBus.getUsers().get(0).getFirstName().equals("Jane") );
 		assert( titlesReplyCook.getUsers().get(0).getFirstName().equals("Fred") || titlesReplyCook.getUsers().get(1).getFirstName().equals("Fred") );
 		assert( titlesReplyCook.getUsers().get(0).getFirstName().equals("Bob") || titlesReplyCook.getUsers().get(1).getFirstName().equals("Bob") );
-
 	}
 	
 	@Test
@@ -435,13 +421,11 @@ class BackEndPortfolioApplicationTests {
 		assert(titlesSearchReply.getTitles().get(0).getTitle().equals("Cook"));
 		assert(titlesSearchReply.getTitles().get(0).getUsers().get(0).getSecret().equals("***Secret***"));
 
-		
 		HttpHeaders headersAdmin = new HttpHeaders();
 		headersAdmin.setBasicAuth("5", "AmSecondUser");
 		TitlesReply titlesSearchReplyAdmin = mapper.readValue(mvc.perform(post("/api/titles/search/").param("searchValue", "o").headers(headersAdmin)).andReturn().getResponse().getContentAsString(), TitlesReply.class);
 		assert(titlesSearchReplyAdmin.isSuccess());
 		assert(titlesSearchReplyAdmin.getTitles().get(0).getUsers().get(0).getSecret().equals("***Secret***"));
-		
 		
 		TitlesReply titlesSearchReplyError = mapper.readValue(mvc.perform(post("/api/titles/search/").param("searchValue", "<")).andReturn().getResponse().getContentAsString(), TitlesReply.class);
 		assert(!titlesSearchReplyError.isSuccess());
@@ -469,7 +453,6 @@ class BackEndPortfolioApplicationTests {
 		assert(titlesSearchReplyOok.isSuccess());
 		assert(titlesSearchReplyOok.getAllTitles().size() == 3);
 		assert(titlesSearchReplyOok.getTitles().size() == 2);
-
 	}
 	
 	@Test
@@ -506,7 +489,6 @@ class BackEndPortfolioApplicationTests {
 		);
 		userService.addUser(tempUser);
 
-		
 		List<Title> gotSearchTitlesOok = userService.getTitlesSearch("o");
 		assert(gotSearchTitlesOok.size() == 2);
 		
@@ -518,7 +500,6 @@ class BackEndPortfolioApplicationTests {
 		} else {
 			titlesReplyCook = gotSearchTitlesOok.get(1);
 			titlesReplySpooky = gotSearchTitlesOok.get(0);
-
 		}
 		assert( titlesReplySpooky.getUsers().get(0).getFirstName().equals("Jessie") );
 		assert( titlesReplyCook.getUsers().get(0).getFirstName().equals("Fred") || titlesReplyCook.getUsers().get(1).getFirstName().equals("Fred") );
@@ -558,7 +539,6 @@ class BackEndPortfolioApplicationTests {
 		assert(allUserReply.getAllUsers().size()==4);
 		assert(allUserReply.getAllUsers().get(3).getId()==7);
 		assert(allUserReply.getAllUsers().get(3).getSecret().equals("***Secret***"));
-
 
 		HttpHeaders headersJessie = new HttpHeaders();
 		headersJessie.setBasicAuth("7", "AmFourthUser");
@@ -618,7 +598,6 @@ class BackEndPortfolioApplicationTests {
 		HttpHeaders headersJessieFail = new HttpHeaders();
 		headersJessieFail.setBasicAuth("8", "AmFifthUser");
 		assert(mvc.perform(get("/api/users/all").headers(headersJessieFail)).andReturn().getResponse().getStatus() == 401);
-
 	}
 	
 	@Test
@@ -646,7 +625,6 @@ class BackEndPortfolioApplicationTests {
 		assert(allUsers.size()==4);
 		assert(allUsers.get(3).getId()==7);
 		assert(allUsers.get(3).getSecret().equals("***Secret***"));
-
 		
 		ArrayList<GrantedAuthority> jessieAuthArray = new ArrayList<GrantedAuthority>();
 		jessieAuthArray.add( new SimpleGrantedAuthority("ROLE_USER") );
@@ -673,7 +651,6 @@ class BackEndPortfolioApplicationTests {
 			"grey",
 			"black"
 		);
-
 		
 		boolean errored = false;
 		SiteUser addedUserDeniedByContacts;
@@ -699,7 +676,6 @@ class BackEndPortfolioApplicationTests {
 			"grey",
 			"black"
 		);
-
 		
 		errored = false;
 		SiteUser addedUserDeniedByColorText;
@@ -709,7 +685,6 @@ class BackEndPortfolioApplicationTests {
 			errored = true;
 		}
 		assert(errored);
-
 		
 		errored = false;
 		SiteUser addedUserDeniedByNull;
@@ -719,8 +694,6 @@ class BackEndPortfolioApplicationTests {
 			errored = true;
 		}
 		assert(errored);
-		
-		
 	}
 	
 	@Test
@@ -740,7 +713,6 @@ class BackEndPortfolioApplicationTests {
 		tempBob.setFirstName("Robert");
 		tempBob.setQuote("A quote no more");
 		tempBob.setSecret("He can change his secret");
-
 		
 		String updateBody = mapper.writeValueAsString(tempBob);
 		HttpHeaders headersRobert = new HttpHeaders();
@@ -765,7 +737,6 @@ class BackEndPortfolioApplicationTests {
 		assert(allUserReplyRobert.isSuccess());
 		assert(allUserReplyRobert.getAllUsers().size()==3);
 		assert(allUserReplyRobert.getAllUsers().get(0).getSecret().equals("He can change his secret"));
-
 
 		tempBob.setSecret("He can change his secret again?");
 		updateBody = mapper.writeValueAsString(tempBob);
@@ -794,7 +765,6 @@ class BackEndPortfolioApplicationTests {
 		assert(allUserReply.isSuccess());
 		assert(allUserReply.getAllUsers().get(0).getLastName().equals("No_Name"));
 		assert(allUserReplyRobert.getAllUsers().get(0).getSecret().equals("He can change his secret"));
-
 	}
 	
 	@Test
@@ -852,21 +822,17 @@ class BackEndPortfolioApplicationTests {
 		}
 		assert(errored);
 		
-		
 		SiteUser updatedUserJaneQuote = userService.updateUsers(tempJane, janeLogin);
 		assert(updatedUserJaneQuote.getId() == 5);
 		assert(updatedUserJaneQuote.getFirstName().equals("Rebecca"));
 		assert(updatedUserJaneQuote.getQuote().equals("A Different Quote"));
-
 		
 		allUsers = userService.getUsers(janeLogin);
 		assert(allUsers.size()==3);
 		assert(allUsers.get(1).getId()==5);
 		assert(allUsers.get(1).getFirstName().equals("Rebecca"));
 		assert(allUsers.get(1).getQuote().equals("A Different Quote"));
-
 	}
-
 	
 	@Test
 	void userControllerAddContactTests(@Autowired MockMvc mvc) throws Exception{
@@ -880,8 +846,6 @@ class BackEndPortfolioApplicationTests {
 		SiteUser tempBob = allUserReply.getAllUsers().get(0);
 		SiteUser tempFred = allUserReply.getAllUsers().get(2);
 
-		
-
 		HttpHeaders headersFred = new HttpHeaders();
 		headersFred.setBasicAuth("6", "AmThirdUser");
 		RESTRequest addUserRequest = new RESTRequest("", tempBob, tempFred);
@@ -890,7 +854,6 @@ class BackEndPortfolioApplicationTests {
 		assert(addContactsReply.isSuccess());
 		assert(addContactsReply.getUsers().size()==1);
 		assert(addContactsReply.getUsers().get(0).getId()==4);
-
 		
 		allUserReply = mapper.readValue(mvc.perform(get("/api/users/all")).andReturn().getResponse().getContentAsString(), UserReply.class);
 		assert(allUserReply.isSuccess());
@@ -900,23 +863,18 @@ class BackEndPortfolioApplicationTests {
 		tempFred = allUserReply.getAllUsers().get(2);
 		addUserRequest = new RESTRequest("", tempBob, tempFred);
 		addContactBody = mapper.writeValueAsString(addUserRequest);
-
 		
 		UserReply addContactsReplyRedoFail = mapper.readValue(mvc.perform(post("/api/users/addcontact/").contentType("application/json").content(addContactBody).headers(headersFred)).andReturn().getResponse().getContentAsString(), UserReply.class);
 		assert(!addContactsReplyRedoFail.isSuccess());
-
 		
 		HttpHeaders headersJane = new HttpHeaders();
 		headersJane.setBasicAuth("5", "AmSecondUser");
 		UserReply addContactsReplyLoginFail = mapper.readValue(mvc.perform(post("/api/users/addcontact/").contentType("application/json").content(addContactBody).headers(headersJane)).andReturn().getResponse().getContentAsString(), UserReply.class);
 		assert(!addContactsReplyLoginFail.isSuccess());
-		
 	}
-
 	
 	@Test
 	void userServiceAddContactTests(@Autowired UserService userService) throws Exception{
-
 		
 		List<SiteUser> allUsers = userService.getUsers(null);
 		assert(allUsers.size()==3);
@@ -933,7 +891,6 @@ class BackEndPortfolioApplicationTests {
 		SiteUser newFredUserAddedContact = userService.addContact(tempFred, tempJane, janeLogin);
 		assert(newFredUserAddedContact.getContactNum() == 1);
 		assert(newFredUserAddedContact.getContacts()[0] == 5);
-
 		
 		allUsers = userService.getUsers(null);
 		assert(allUsers.size()==3);
@@ -941,8 +898,6 @@ class BackEndPortfolioApplicationTests {
 		tempFred = allUsers.get(2); 
 		assert(allUsers.get(2).getContactNum() == 1);
 		assert(allUsers.get(2).getContacts()[0] == 5);
-
-
 		
 		ArrayList<GrantedAuthority> fredAuthArray = new ArrayList<GrantedAuthority>();
 		fredAuthArray.add( new SimpleGrantedAuthority("ROLE_USER") );
@@ -957,7 +912,6 @@ class BackEndPortfolioApplicationTests {
 		assert(allUsers.get(1).getContacts()[0] == 6);
 		SiteUser tempBob = allUsers.get(0);
 		
- 
 		ArrayList<GrantedAuthority> bobAuthArray = new ArrayList<GrantedAuthority>();
 		bobAuthArray.add( new SimpleGrantedAuthority("ROLE_USER") );
 		UsernamePasswordAuthenticationToken bobLogin = new UsernamePasswordAuthenticationToken((Object) new UserPrincipal("4"), (Object) null, bobAuthArray ); 
@@ -969,9 +923,7 @@ class BackEndPortfolioApplicationTests {
 			errored = true;
 		}
 		assert(errored);
-
 	}
-
 	
 	@Test
 	void userControllerDeleteUserTests(@Autowired MockMvc mvc) throws Exception{
@@ -987,7 +939,6 @@ class BackEndPortfolioApplicationTests {
 		headersFred.setBasicAuth("6", "AmThirdUser");
 		UserReply deleteUserReplyFailWrongUserLogin = mapper.readValue(mvc.perform(delete("/api/users/4").headers(headersFred)).andReturn().getResponse().getContentAsString(), UserReply.class);
 		assert(!deleteUserReplyFailWrongUserLogin.isSuccess());
-
 		
 		HttpHeaders headersBob = new HttpHeaders();
 		headersBob.setBasicAuth("4", "AmFirstUser");
@@ -1023,7 +974,6 @@ class BackEndPortfolioApplicationTests {
 		assert(allUserReply.isSuccess());
 		assert(allUserReply.getAllUsers().size()==0);
 		assert(mvc.perform(get("/api/users/all").headers(headersJane)).andReturn().getResponse().getStatus() == 401);
-
 	}
 
 	
@@ -1070,9 +1020,7 @@ class BackEndPortfolioApplicationTests {
 		String deletedUserIdJane = userService.deleteUser(Long.valueOf(5), janeLogin);
 		assert(deletedUserIdJane.equals("5"));
 		assert(userService.getUsers(null).size() == 0);
-
 	}
-
 	
 	@Test
 	void userControllerAttemptLoginTests(@Autowired MockMvc mvc) throws Exception{
@@ -1098,7 +1046,6 @@ class BackEndPortfolioApplicationTests {
 		assert(attemptLoginReplyJane.isAdmin());
 		assert(attemptLoginReplyJane.getCurrentUser().getFirstName().equals("Jane"));
 	}
-
 	
 	@Test
 	void userServiceAttemptLoginTests(@Autowired UserService userService) throws Exception{
@@ -1154,7 +1101,6 @@ class BackEndPortfolioApplicationTests {
 		assert(! (boolean) ReflectionTestUtils.invokeMethod(userService, "checkUserConsistancy", tempUser));
 		tempUser.setContactNum(0);
 		assert((boolean) ReflectionTestUtils.invokeMethod(userService, "checkUserConsistancy", tempUser));
-
 	}
 
 	@Test
@@ -1216,7 +1162,6 @@ class BackEndPortfolioApplicationTests {
 		assert(updateThemeJane.getActiveTabColor().equals(tempTheme.getActiveTabColor()));
 		assert(updateThemeJane.getBackgroundColor().equals(tempTheme.getBackgroundColor()));
 		assert(updateThemeJane.getTextColor().equals(tempTheme.getTextColor()));
-
 		
 		gotAllThemes = mapper.readValue(mvc.perform(get("/api/themes/all/")).andReturn().getResponse().getContentAsString(), Themes[].class);
 		assert(gotAllThemes.length == 4);
@@ -1224,9 +1169,5 @@ class BackEndPortfolioApplicationTests {
 		assert(gotAllThemes[3].getActiveTabColor().equals(tempTheme.getActiveTabColor()));
 		assert(gotAllThemes[3].getBackgroundColor().equals(tempTheme.getBackgroundColor()));
 		assert(gotAllThemes[3].getTextColor().equals(tempTheme.getTextColor()));
-
-
 	}
-
-
 }

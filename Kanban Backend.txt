@@ -4,13 +4,19 @@ Current Tasks
 -----------------------------------------
 
 #========================================
-Task #6: Polish Code
+Task #7: Write Readme
 Resolution: Not Started
 SubTasks: None
 #========================================
 
 Finished Tasks
 -----------------------------------------
+
+#========================================
+Task #6: Polish Code
+Resolution: Finished
+SubTasks: None
+#========================================
 
 #========================================
 Task #2: Design Unit and Intergration Tests

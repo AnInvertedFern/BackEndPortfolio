@@ -19,7 +19,7 @@ public class Themes implements Comparator<Themes> {
   private String activeTabColor;
   private String toolbarColor;
   private String searchBarColor;
-  private String logoutButtonColor;
+  private String loginButtonColor;
   private String backgroundColor;
   private String textColor;
   private String addUserColor;
@@ -38,7 +38,7 @@ public class Themes implements Comparator<Themes> {
   public Themes() {
   }
   public Themes(String inactiveTabColor, String activeTabColor, String toolbarColor, String searchBarColor,
-      String logoutButtonColor, String backgroundColor, String textColor, String addUserColor, String editUserColor,
+      String loginButtonColor, String backgroundColor, String textColor, String addUserColor, String editUserColor,
       String confirmThemeColor, String refreshUserColor, String popupColor, String titleShadowColor,
       String searchTitleShadowColor, String footerSeperatorColor, String loginShadowColor, String inputColor,
       String inputButtonColor) {
@@ -46,7 +46,7 @@ public class Themes implements Comparator<Themes> {
     this.activeTabColor = activeTabColor;
     this.toolbarColor = toolbarColor;
     this.searchBarColor = searchBarColor;
-    this.logoutButtonColor = logoutButtonColor;
+    this.loginButtonColor = loginButtonColor;
     this.backgroundColor = backgroundColor;
     this.textColor = textColor;
     this.addUserColor = addUserColor;
@@ -88,11 +88,11 @@ public class Themes implements Comparator<Themes> {
   public void setSearchBarColor(String searchBarColor) {
     this.searchBarColor = searchBarColor;
   }
-  public String getLogoutButtonColor() {
-    return logoutButtonColor;
+  public String getLoginButtonColor() {
+    return loginButtonColor;
   }
-  public void setLogoutButtonColor(String logoutButtonColor) {
-    this.logoutButtonColor = logoutButtonColor;
+  public void setLoginButtonColor(String loginButtonColor) {
+    this.loginButtonColor = loginButtonColor;
   }
   public String getBackgroundColor() {
     return backgroundColor;
@@ -182,7 +182,7 @@ public class Themes implements Comparator<Themes> {
         + backgroundColor + ", confirmThemeColor=" + confirmThemeColor + ", editUserColor=" + editUserColor
         + ", footerSeperatorColor=" + footerSeperatorColor + ", id=" + id + ", inactiveTabColor=" + inactiveTabColor
         + ", inputButtonColor=" + inputButtonColor + ", inputColor=" + inputColor + ", loginShadowColor="
-        + loginShadowColor + ", logoutButtonColor=" + logoutButtonColor + ", popupColor=" + popupColor
+        + loginShadowColor + ", loginButtonColor=" + loginButtonColor + ", popupColor=" + popupColor
         + ", refreshUserColor=" + refreshUserColor + ", searchBarColor=" + searchBarColor + ", searchTitleShadowColor="
         + searchTitleShadowColor + ", textColor=" + textColor + ", titleShadowColor=" + titleShadowColor
         + ", toolbarColor=" + toolbarColor + "]";
