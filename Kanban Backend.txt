@@ -5,7 +5,7 @@ Current Tasks
 
 #========================================
 Task #7: Write Readme
-Resolution: Not Started
+Resolution: Might Need Some Revisions
 SubTasks: None
 #========================================
 

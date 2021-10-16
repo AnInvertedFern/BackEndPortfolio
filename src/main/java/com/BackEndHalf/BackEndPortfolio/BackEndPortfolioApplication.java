@@ -59,7 +59,7 @@ public class BackEndPortfolioApplication implements CommandLineRunner {
 			"blueviolet",
 			"black",
 			"orange",
-			"blue",
+			"coral",
 			"cornsilk",
 			"pink"
 		);
