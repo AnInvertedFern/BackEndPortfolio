@@ -1,5 +1,5 @@
 # BackEndPortfolio
-The backend implementation for a full stack portfolio piece for CT
+The backend implementation of a full stack portfolio piece for CT!
 
 ## Features
 ### Core Features
@@ -23,26 +23,26 @@ The backend implementation for a full stack portfolio piece for CT
 ### API Layer
 User Controller
 
-- Responsible for handling api call related to the user table and information
-- Responsible for handling api call related to the user login and logout attempts
-- Responsible for constructing the HTTP response and JSON object related to user api requests
+- Responsible for handling API call related to the user table and information
+- Responsible for handling API call related to the user login and logout attempts
+- Responsible for constructing the HTTP response and JSON object related to user API requests
 
 Theme Controller
 
-- Responsible for handling api call related to the theme table and information
-- Responsible for constructing the HTTP response related to theme api requests
+- Responsible for handling API call related to the theme table and information
+- Responsible for constructing the HTTP response related to theme API requests
 ### Service Layer
 User Service
 
 - Responsible for input validation, login validation, and checking for data integrity
 - Responsible for role and user based information filtering
-- Responsible for facilitating communication between the user api controller and the data access layer for the user table 
+- Responsible for facilitating communication between the user API controller and the data access layer for the user table 
 - Responsible for building title objects and their collections of users 
 
 Theme Service
 
 - Responsible for login validation
-- Responsible for facilitating communication between the theme api controller and the data access layer for the theme table
+- Responsible for facilitating communication between the theme API controller and the data access layer for the theme table
 ### Data Access Layer
 User Repository
 
@@ -66,17 +66,17 @@ Jasmine (Testing Framework)
 
 Jackson (JSON)
 
-REST
+REST and HTTP
 
 Java (Backend)
 
-Spring MVC (Backend Framework), Security (Authentication), and Testing (Spring's Testing Framework) (Backend)
+Spring MVC (Backend Framework), Spring Security (Authentication), and Spring Testing (Spring's Testing Framework) (Backend)
 
 JUnit (Testing Framework) (Backend)
 
-JPA/HIbernate (No-SQL) (Backend)
+Hibernate/JPA (No-SQL) (Backend)
 
-JDBC/SQL and PostgreSQL (Backend)
+SQL/JDBC and PostgreSQL (Backend)
 
 ## Testing with Jasmine and JUnit
 Manual Testing
@@ -87,7 +87,7 @@ Manual Testing
     - Procedure for checking that each of the components in the main section loads correctly
   - Procedure for checking displayed objects' integrities and construction
   - Procedure for checking the functionality and display of different popups and forms
-  - Procedure for checking the functionality and state changes from buttons and other event sources on each of the three pages of the site
+  - Procedure for checking the functionality of and state changes from buttons and other event sources on each of the three pages of the site
   - Procedure for checking data transfer to the backend and data permanence
   - Procedure for checking proper state and display change to the site upon change in login status
   - Procedure for verifying login and display logic
@@ -113,12 +113,6 @@ Intergration Testing
   - Automatically tests for data integrity
   - Automatically tests API request and response data formats
 
-
-
-Made By CT!
-
-See the Frontend at __!
-
 ## User Login Information *
 "Bob Smith" - User ID : 4, Password : AmFirstUser, Role : User
 
@@ -127,3 +121,9 @@ See the Frontend at __!
 "Fred Joe" - User ID : 7, Password : AmThirdUser, Role : User
 
 \* User IDs are auto generated and system dependent, check the backend console or database to confirm for your system
+
+
+
+Made By CT!
+
+See the Frontend at [github.com/AnInvertedFern/FrontEndPortfolio](https://github.com/AnInvertedFern/FrontEndPortfolio)!
