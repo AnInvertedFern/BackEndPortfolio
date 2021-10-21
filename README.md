@@ -56,27 +56,27 @@ Web Security Config
 
 - Contains the configurations for CORS and user logins
 ## Technologies
-Angular (Frontend TypeScript Framework)
+Java
 
-TypeScript/JavaScript
+Spring MVC (Backend Framework), Spring Security (Authentication), and Spring Testing (Spring's Testing Framework)
 
-HTML and CSS
+JUnit (Testing Framework)
 
-Jasmine (Testing Framework)
+Hibernate/JPA
+
+SQL/JDBC and PostgreSQL
 
 Jackson (JSON)
 
 REST and HTTP
 
-Java (Backend)
+Angular (Frontend TypeScript Framework)
 
-Spring MVC (Backend Framework), Spring Security (Authentication), and Spring Testing (Spring's Testing Framework) (Backend)
+TypeScript/JavaScript (Frontend)
 
-JUnit (Testing Framework) (Backend)
+HTML and CSS (Frontend)
 
-Hibernate/JPA (No-SQL) (Backend)
-
-SQL/JDBC and PostgreSQL (Backend)
+Jasmine (Testing Framework) (Frontend)
 
 ## Testing with Jasmine and JUnit
 Manual Testing
@@ -122,7 +122,7 @@ Intergration Testing
 
 \* User IDs are auto generated and system dependent, check the backend console or database to confirm for your system
 
-
+<br><br>
 
 Made By CT!
 
